@@ -1,0 +1,30 @@
+Project Title: Notes and Reminders App
+Description:
+The Notes and Reminders App allows users to create, organize, and set reminders for their notes. The app provides an intuitive interface where users can write notes, set deadlines, and receive visual indications when a note is due soon or overdue.
+
+How It Works:
+Create Notes:
+
+Users can create notes with a title and description.
+Each note can have an optional deadline.
+Set Reminders:
+
+Users can set reminders for notes.
+Reminders can be based on a specific date and time.
+The app will visually indicate when a note's reminder time is approaching (e.g., change color) or if the note is overdue.
+Organize Notes:
+
+Users can view all notes in a list format.
+Notes can be filtered by those with upcoming deadlines, overdue, or completed.
+Edit and Delete Notes:
+
+Users can click on a note to edit its content or deadline.
+Notes can be deleted individually.
+Completion of Notes:
+
+Users can mark notes as completed.
+Completed notes are visually distinguished and can be filtered out of the main view.
+Persistent Storage:
+
+All notes and reminders are saved to local storage, ensuring they persist across sessions.
+The app will leverage React hooks for state management, handling side effects like saving data to local storage, and interacting with DOM elements for focus management and reminders.
