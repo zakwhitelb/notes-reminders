@@ -1,0 +1,13 @@
+my-express-app/
+│
+├── /routes            # Store route files (e.g., API endpoints)
+│    └── ...Routes.js
+│
+├── /controllers       # Store business logic (separates logic from routes)
+│    └── ...Controller.js
+│
+├── /models            # Store database models or schemas
+│    └── ...Model.js
+│
+├── index.js           # Main entry point for your app
+└── package.json       # Node.js package file

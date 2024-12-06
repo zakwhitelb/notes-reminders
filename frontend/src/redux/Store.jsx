@@ -1,9 +1,12 @@
+// System
 import { configureStore } from '@reduxjs/toolkit';
-import exampleReducer from './slices/exampleSlice';
+
+// Reducers
+import ThemeReducer from "./slices/ThemeSlice"
 
 const store = configureStore({
   reducer: {
-    example: exampleReducer, // Add more reducers here
+    theme: ThemeReducer
   },
 });
 
