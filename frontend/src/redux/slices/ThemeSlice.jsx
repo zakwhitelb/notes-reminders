@@ -1,20 +1,23 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { useLayoutEffect } from 'react';
+
+const initialTheme = localStorage.getItem("theme") || "light";
+// Ensure the DOM is updated during initialization
+document.querySelector('body').setAttribute('data-theme', initialTheme);
+localStorage.setItem('theme', initialTheme);
 
 const ThemeSlice = createSlice({
   name: 'theme',
   initialState: {
-    value: localStorage.getItem("theme") || "light",
+    value: initialTheme,
   },
   reducers: {
     ToggleTheme: (state) => {
-      state.value === "light" ? "dark" : "light";
+      // Toggle the theme value
+      state.value = state.value === "light" ? "dark" : "light";
 
-      useLayoutEffect(() => {
-        document.querySelector('body').setAttribute('data-theme', state.value);
-        localStorage.setItem('theme', state.value);
-      }, [state.value]);
-
+      // Update localStorage and the DOM
+      document.querySelector('body').setAttribute('data-theme', state.value);
+      localStorage.setItem('theme', state.value);
     },
   },
 });

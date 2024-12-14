@@ -1,3 +1,4 @@
+Server structure :
 my-express-app/
 │
 ├── /routes            # Store route files (e.g., API endpoints)

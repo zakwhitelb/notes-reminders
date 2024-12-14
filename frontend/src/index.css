@@ -2,6 +2,53 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "merriweather-sans-bold";
+  src: local("merriweather-sans"), url("./shared/assets/fonts/merriweather-sans/MerriweatherSansBold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "merriweather-sans-regular";
+  src: local("merriweather-sans"), url("./shared/assets/fonts/merriweather-sans/MerriweatherSansRegular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "khula-regular";
+  src: local("khula"), url("./shared/assets/fonts/khula/KhulaRegular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "khula-semi-bold";
+  src: local("khula"), url("./shared/assets/fonts/khula/KhulaSemiBold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "heebo-regular";
+  src: local("heebo"), url("./shared/assets/fonts/heebo/HeeboRegular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "heebo-medium";
+  src: local("heebo"), url("./shared/assets/fonts/heebo/HeeboMedium.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "heebo-semi-bold";
+  src: local("heebo"), url("./shared/assets/fonts/heebo/HeeboSemiBold.ttf") format("truetype");
+}
+
+@layer utilities {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+      display: none;
+  }
+ /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+}
+}
+
 :root{
   --transparent: transparent;
   --black: #212121;
@@ -9,7 +56,15 @@
   --blue: #6798C0;
   --yellow: #F8C521;
   --red: #FE3D42;
-  --skyWhite: #E7E6E4;
+  --green: #4CAF50;
+  --orange: #FFA500;
+  --intermediate1: #FD5537;
+  --intermediate2: #FB7731;
+  --intermediate3: #F9A02A;
+  --intermediate4: #D8AE2F;
+  --intermediate5: #A7893F;
+  --intermediate6: #758E45;
+  --skyWhite: #DEDEDE;
   --skyBlack: #2F2F2F;
   --blackPlaceholder: #70706F;
   --whitePlaceholder: #ACABA7;
@@ -23,8 +78,10 @@
   --24: 1.5rem;
   --48: 3rem;
 
-  background-color: var(--white2Balck);
   color: var(--black);
+  margin: 0;
+  animation-duration: 0.5s;
+  transition-duration: 0.5s;
 
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 
@@ -38,16 +95,18 @@
   --skyBlue: #CCEAF1;
   --skyYellow: #FEEBAA;
   --skyRed: #FF8786;
-  --white2Balck: #FFFDF7;
-  --black2White: #212121;
-  --skyBlack2SkyBlack: #E7E6E4;
+  --white2black: #FFFDF7;
+  --black2white: #212121;
+  --skyWhite2skyBlack: #DEDEDE;
+  --placeholder: #7C7C7C;
 }
 
 [data-theme="dark"] {
   --skyBlue: #3D5161;
   --skyYellow: #776321;
   --skyRed: #792C2E;
-  --white2Balck: #212121;
-  --black2White: #FFFDF7;
-  --skyBlack2SkyBlack: #2F2F2F;
+  --white2black: #212121;
+  --black2white: #FFFDF7;
+  --skyWhite2skyBlack: #2F2F2F;
+  --placeholder: #979693;
 }

@@ -1,38 +1,44 @@
 // System
-import { useLayoutEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 
 // Styles
 import "./shared/styles/GlobaleStyle.css";
 
 // Pages
 import { Home } from "./pages/home/Home";
+import { Authentication } from "./pages/authentication/Authentication";
+import { NoteArea } from "./pages/note-area/NoteArea";
+import { Profile } from "./pages/profile/Profile";
 import { Error404 } from "./pages/error/Error404";
 
 // Components
 import { Header } from "./shared/components/header/Header";
 
 function App() {
-  useLayoutEffect(() => {
-    if (!localStorage.getItem("theme")) {
-      document.querySelector("body").setAttribute("data-theme", "light");
-      localStorage.setItem("theme", "light");
-    }
-  }, []);
+  return (
+    <Router>
+      <MainLayout />
+    </Router>
+  );
+}
+
+function MainLayout() {
+  const location = useLocation(); 
+  const hideHeaderRoutes = ["/authentication", "/profile"]; 
+
+  const shouldHideHeader = hideHeaderRoutes.includes(location.pathname); 
 
   return (
-    <>
-      <Header />
-      <Router>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/authentication" element={<div>Authentication</div>} />
-          <Route path="/note-area" element={<div>Note Area</div>} />
-          <Route path="/profile" element={<div>Profile</div>} />
-          <Route path="/*" element={<Error404 />} />
-        </Routes>
-      </Router>
-    </>
+    <div className="flex flex-col w-full h-screen overflow-hidden bg-transparent">
+      {!shouldHideHeader && <Header />} 
+      <Routes>
+        <Route path="/" element={<Home />}/>
+        <Route path="/authentication" element={<Authentication />}/>
+        <Route path="/note-area" element={<NoteArea />}/>
+        <Route path="/profile" element={<Profile />}/>
+        <Route path="/*" element={<Error404 />}/>
+      </Routes>
+    </div>
   );
 }
 

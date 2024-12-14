@@ -1,3 +1,4 @@
+// System
 import PropTypes from 'prop-types';
 
 function Logo({ width, height, color }) {
