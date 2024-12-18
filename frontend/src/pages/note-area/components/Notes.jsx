@@ -12,7 +12,6 @@ function Notes() {
             className="grid grid-cols-[auto_auto_auto_auto] auto-rows-min justify-between pb-[20px] gap-y-[30px] overflow-y-scroll no-scrollbar"
         >
             <AddNoteButton />
-            
         </motion.div>
     )
 }
