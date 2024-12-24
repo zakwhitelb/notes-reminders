@@ -1,19 +1,15 @@
-GET http://localhost:4000/notes/675f3b061792815cfc8fb6d8/overdue
+GET http://localhost:4000/users
 
 ###
 
-POST  http://localhost:4000/notes/675f3b061792815cfc8fb6d8
+POST  http://localhost:4000/users/login/
 Content-Type: application/json
 
 {
-    "title": "Meeting with Team",
-    "description": "Discuss project milestones and deadlines.",
-    "day": "2024-12-20",
-    "hour": 15,
-    "min": 30,
-    "status": "overdue"
+    "email": "h@zeofhzef.zeofjezf",
+    "password": "iuqgefiefgizefize"
 }
 
 ###
 
-DELETE http://localhost:4000/users
+DELETE http://localhost:4000/users/675f3b061792815cfc8fb6d8

@@ -1,0 +1,11 @@
+1- Navigate to the Project Directory:
+    cd your-react-project
+
+2- Install Dependencies: Ensure all the dependencies are installed using:
+    npm install
+
+3- Export Dependencies to a requirements.txt-like File: Use the following command to list all dependencies into a text file:
+    npm list --depth=0 --prod > requirements.txt
+
+--> If you want just the package names and versions:
+    npm list --depth=0 --prod --json | jq -r '.dependencies | to_entries[] | "\(.key)@\(.value.version)"' > react-requirements.txt
