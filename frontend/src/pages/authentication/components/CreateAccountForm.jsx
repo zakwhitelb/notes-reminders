@@ -2,17 +2,21 @@
 import { useState, useLayoutEffect } from "react";
 import { motion } from "motion/react";
 import validator from "validator";
-
 import PropTypes from "prop-types"; 
+
+// COntext
+import { UserController } from "../../../shared/controllers/user/UserController";
 
 // Components
 import { Input } from "../../../shared/components/ui/Input";
 
 function CreateAccountForm({ setButtonClicked, data, handleChange, validateData, clearData }) {
-
+    const { responce, errorMessage, CreateAccount } = UserController();
+    console.log(responce)
     const [colorPassword, setColorPassword] = useState("var(--red)")
 
     useLayoutEffect(() => {
+        console.log("Response : " + responce)
         const password = data.password ? data.password : ""
         if(validator.isStrongPassword(password, {minLength: 8, minLowercase: 0, minUppercase: 1, minNumbers: 1, minSymbols: 1})) {
             setColorPassword("bg-[var(--green)]");
@@ -51,7 +55,7 @@ function CreateAccountForm({ setButtonClicked, data, handleChange, validateData,
             console.log("nothing is good in password");
         }
         console.log(data.password)
-    }, [setColorPassword, data]);
+    }, [setColorPassword, data, responce]);
 
     const handleSubmit = () => {
 
@@ -59,15 +63,17 @@ function CreateAccountForm({ setButtonClicked, data, handleChange, validateData,
 
         console.log(data);
 
+        CreateAccount(data);
+
         clearData();
     }
 
     return (
         <div className="flex flex-col gap-[20px]">
             <Input 
-                name="user_name" 
+                name="name" 
                 placeholder="User name" 
-                value={data.user_name || ""} 
+                value={data.name || ""} 
                 handleChange={handleChange} 
             />
             <Input 
@@ -86,7 +92,11 @@ function CreateAccountForm({ setButtonClicked, data, handleChange, validateData,
                 colorPassword={colorPassword}
                 create_account
             />
+            
             <div>
+                <div className="w-full">
+                    <p className="text-[16px] font-[khula-regular] text-[var(--red)] cursor-default">{errorMessage}</p> 
+                </div>
                 <div className="flex justify-between items-center">
                     <div className="flex items-center gap-[4px]">
                         <p className="text-[14px] font-[khula-regular] cursor-default">

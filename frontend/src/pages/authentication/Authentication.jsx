@@ -3,6 +3,9 @@ import { useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import validator from "validator";
 
+// Controller
+import { UserController } from "../../shared/controllers/user/UserController";
+
 // Components
 import { Picture } from "../../shared/components/ui/Picture";
 import { CreateAccountForm } from "./components/CreateAccountForm";
@@ -13,6 +16,8 @@ import { SubHeader } from "../../shared/components/ui/SubHeader";
 import { Logo } from "../../shared/assets/icons/Logo.icon";
 
 function Authentication() {
+    const { responce} = UserController();
+    console.log(responce)
     const [buttonClicked, setButtonClicked] = useState("create_account");
     const [data, setData] = useState({});
 
@@ -25,8 +30,9 @@ function Authentication() {
 
     const validateData = useCallback((data) => {
         if (validator.isEmail(data.email)) {
-            console.log("Email", data.email);
+            return true;
         }
+        return false;
     }, []);
 
     const clearData = useCallback(() => {

@@ -7,6 +7,7 @@ const getUserById = require('../middleware/getUserById'); // Moving this functio
 router.get('/', userController.getUsers);
 router.get('/:id', getUserById, userController.getUserById);
 router.post('/', userController.createUser);
+router.post('/login/', userController.loginUser);
 router.patch('/:id', getUserById, userController.updateUser);
 router.delete('/:id', getUserById, userController.deleteUser);
 

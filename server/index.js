@@ -4,12 +4,16 @@ const express = require("express");
 const mongoose = require("mongoose");
 const userRoute = require("./routes/userRoute");
 const noteRoute = require("./routes/noteRoute")
+const cors = require("cors");
 
 const app = express();
 const PORT = process.env.PORT || 4000; // Use dynamic port from env if available
 
 // Middleware
 app.use(express.json());
+
+// Allow frontend to call the backend
+app.use(cors());
 
 // Database Connection
 mongoose.connect(process.env.DATABASE_URL, {
