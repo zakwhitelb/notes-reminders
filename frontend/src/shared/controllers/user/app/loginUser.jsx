@@ -1,16 +1,18 @@
 // System
 import axios from "axios";
 
-async function loginUser (setErrorMessage, setResponce, data) {
+async function loginUser (setErrorMessage, data) {
     try {
-        const response = await axios.post("http://localhost:5000/login", { 
+        const response = await axios.post("http://localhost:4000/users/login", { 
             email: data.email, 
             password: data.password
         });
-        setResponce(response.data.token);
+
+        return response;
     } 
     catch (err) {
-        setErrorMessage(err.response.data.error);
+        setErrorMessage(err.response?.data?.message || "An error occurred");
+        throw err;
     }
 };
 

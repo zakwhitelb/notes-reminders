@@ -1,21 +1,19 @@
 import axios from "axios";
 
-async function createUser(setErrorMessage, setResponse, data) {
-
+async function createUser(setErrorMessage, data) {
     try {
+        // Make the API request
         const response = await axios.post("http://localhost:4000/users", {
             name: data.name,
             email: data.email,
-            password: data.password
+            password: data.password,
         });
-
-        console.log("API Response: ", response);
 
         return response;
     } 
     catch (err) {
-        // Handle errors
-        setErrorMessage(err.response?.data?.error || "An error occurred");
+        setErrorMessage(err.response?.data?.message || "An error occurred");
+        throw err;
     }
 }
 

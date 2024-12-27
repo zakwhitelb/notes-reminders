@@ -31,12 +31,7 @@ function Home() {
             onHoverStart={() => console.log('hover started!')}
             className="flex justify-center items-center"
           >
-            <Link 
-              to="/authentication"
-              className="w-fit bg-[var(--black2white)] rounded-[10px] py-[10px] px-[60px]"
-            >
-              <p className="w-fit text-[var(--white2black)] font-[heebo-medium]">Create Account</p>
-            </Link>
+            
           </motion.div>
           <motion.div 
             whileHover={{ scale: 1.08 }}
@@ -44,15 +39,21 @@ function Home() {
             onHoverStart={() => console.log('hover started!')}
             className="flex justify-center items-center w-fit"
           >
-            {isLoggedIn &&
-              <Link 
-                to="/note-area"
-                className="w-fit rounded-[10px] py-[10px]"
-              >
-                <p className="w-fit text-[var(--blue)] font-[heebo-medium]">Work space</p>
-              </Link>
+            {isLoggedIn ?
+                <Link 
+                  to="/note-area"
+                  className="w-fit bg-[var(--black2white)] rounded-[10px] py-[10px] px-[60px]"
+                >
+                  <p className="w-fit text-[var(--white2black)] font-[heebo-medium]">Work space</p>
+                </Link>
+              :
+                <Link 
+                  to="/authentication"
+                  className="w-fit bg-[var(--black2white)] rounded-[10px] py-[10px] px-[60px]"
+                >
+                  <p className="w-fit text-[var(--white2black)] font-[heebo-medium]">Create Account</p>
+                </Link>
             }
-            
           </motion.div>
         </div>
       </motion.div>

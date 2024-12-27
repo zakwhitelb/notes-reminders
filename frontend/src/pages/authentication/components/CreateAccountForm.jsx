@@ -1,135 +1,136 @@
 // System
-import { useState, useLayoutEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
-import validator from "validator";
-import PropTypes from "prop-types"; 
+import PropTypes from "prop-types";
 
-// COntext
+// Context
 import { UserController } from "../../../shared/controllers/user/UserController";
+
+// Functions
+import { getPasswordStrengthColor, isValidPasswordColor, isValidUserName, isValidEmail } from "../../../shared/func/Athentification.func";
 
 // Components
 import { Input } from "../../../shared/components/ui/Input";
 
-function CreateAccountForm({ setButtonClicked, data, handleChange, validateData, clearData }) {
-    const { responce, errorMessage, CreateAccount } = UserController();
-    console.log(responce)
-    const [colorPassword, setColorPassword] = useState("var(--red)")
+// Redux
+import { useDispatch } from 'react-redux';
+import { Login } from '../../../redux/slices/AuthentificationSlice'; 
 
-    useLayoutEffect(() => {
-        console.log("Response : " + responce)
-        const password = data.password ? data.password : ""
-        if(validator.isStrongPassword(password, {minLength: 8, minLowercase: 0, minUppercase: 1, minNumbers: 1, minSymbols: 1})) {
-            setColorPassword("bg-[var(--green)]");
-            console.log("minLength: 8, minUppercase: 1, minNumbers: 1, minSymbols: 1");
-        }
-        else if(validator.isStrongPassword(password, {minLength: 8, minLowercase: 0, minUppercase: 1, minNumbers: 0, minSymbols: 0})) {
-            setColorPassword("bg-[var(--intermediate6)]");
-            console.log("minLength: 8, minUppercase: 1, minNumbers: 0, minSymbols: 1");
-        }
-        else if(validator.isStrongPassword(password, {minLength: 8, minLowercase: 0, minUppercase: 0, minNumbers: 1, minSymbols: 0})) {
-            setColorPassword("bg-[var(--intermediate5)]");
-            console.log("minLength: 8, minUppercase: 0, minNumbers: 1, minSymbols: 1");
-        }
-        else if(validator.isStrongPassword(password, {minLength: 8, minLowercase: 0, minUppercase: 0, minNumbers: 0, minSymbols: 1})) {
-            setColorPassword("bg-[var(--intermediate4)]");
-            console.log("minLength: 8, minUppercase: 1, minNumbers: 1, minSymbols: 0");
-        }
-        else if(validator.isStrongPassword(password, {minLength: 8, minLowercase: 0, minUppercase: 0, minNumbers: 0, minSymbols: 0})) {
-            setColorPassword("bg-[var(--yellow)]");
-            console.log("minLength: 8, minUppercase: 0, minNumbers: 0, minSymbols: 0");
-        }
-        else if(validator.isStrongPassword(password, {minLength: 0, minLowercase: 0, minUppercase: 0, minNumbers: 0, minSymbols: 1})) {
-            setColorPassword("bg-[var(--intermediate3)]");
-            console.log("minLength: 0, minUppercase: 0, minNumbers: 0, minSymbols: 1");
-        }
-        else if(validator.isStrongPassword(password, {minLength: 0, minLowercase: 0, minUppercase: 0, minNumbers: 1, minSymbols: 0})) {
-            setColorPassword("bg-[var(--intermediate2)]");
-            console.log("minLength: 0, minUppercase: 0, minNumbers: 1, minSymbols: 0");
-        }
-        else if(validator.isStrongPassword(password, {minLength: 0, minLowercase: 0, minUppercase: 1, minNumbers: 0, minSymbols: 0})) {
-            setColorPassword("bg-[var(--intermediate1)]");
-            console.log("minLength: 0, minUppercase: 1, minNumbers: 0, minSymbols: 0");
-        }
-        else {
-            setColorPassword("bg-[var(--red)]");
-            console.log("nothing is good in password");
-        }
-        console.log(data.password)
-    }, [setColorPassword, data, responce]);
+function CreateAccountForm({ setButtonClicked, data, handleChange, clearData, setSuccessfulAuthentication }) {
+    const { response, errorMessage, setErrorMessage, CreateAccount } = UserController();
+    const [passwordStrengthColor, setPasswordStrengthColor] = useState("bg-[var(--red)]");
+    
+    const navigate = useNavigate();
+    const dispatch = useDispatch();  
 
+    // Navigate to the note area upon successful account creation
+    useEffect(() => {
+        const handleResponse = async () => {
+            if (response) {
+                dispatch(Login());
+                setSuccessfulAuthentication(true);
+                await new Promise((resolve) => setTimeout(resolve, 2000));
+                clearData();
+                navigate("/note-area");
+            }
+        };
+    
+        handleResponse();
+    }, [response, dispatch, navigate, setSuccessfulAuthentication, clearData]);
+    
+
+    // Determine password strength and corresponding color
+    useEffect(() => {
+        setPasswordStrengthColor(getPasswordStrengthColor(data.password || ""));
+    }, [data.password]);
+
+    // Handle input field changes
+    const handleInputChange = useCallback((name, value) => {
+        setErrorMessage(""); // Clear any previous error messages
+        handleChange(name, value);
+    }, [setErrorMessage, handleChange]);
+
+    // Submit the form
     const handleSubmit = () => {
-
-        validateData(data)
-
-        console.log(data);
+        if (!isValidUserName(data.name) || !isValidEmail(data.email) || !isValidPasswordColor(passwordStrengthColor)) {
+            setErrorMessage("Name, email or password is not valid!");
+            return;
+        }
 
         CreateAccount(data);
-
-        clearData();
-    }
+    };
 
     return (
-        <div className="flex flex-col gap-[20px]">
-            <Input 
-                name="name" 
-                placeholder="User name" 
-                value={data.name || ""} 
-                handleChange={handleChange} 
-            />
-            <Input 
-                type="email" 
-                name="email" 
-                placeholder="Email" 
-                value={data.email || ""} 
-                handleChange={handleChange} 
-            />
-            <Input 
-                type="password" 
-                name="password" 
-                placeholder="Password" 
-                value={data.password || ""} 
-                handleChange={handleChange} 
-                colorPassword={colorPassword}
-                create_account
-            />
+        <>
             
-            <div>
-                <div className="w-full">
-                    <p className="text-[16px] font-[khula-regular] text-[var(--red)] cursor-default">{errorMessage}</p> 
-                </div>
-                <div className="flex justify-between items-center">
-                    <div className="flex items-center gap-[4px]">
-                        <p className="text-[14px] font-[khula-regular] cursor-default">
-                            Already have an account?
+            <div className="flex flex-col gap-[20px]">
+                <Input
+                    name="name"
+                    placeholder="User name"
+                    value={data.name || ""}
+                    handleChange={handleInputChange}
+                />
+                <Input
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    value={data.email || ""}
+                    handleChange={handleInputChange}
+                />
+                <Input
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    value={data.password || ""}
+                    handleChange={handleInputChange}
+                    colorPassword={passwordStrengthColor}
+                    create_account
+                />
+
+                <div className="grid gap-[10px]">
+                    <div className="w-full mt-[-5px]">
+                        <p className="text-[16px] font-[khula-regular] text-[var(--red)] cursor-default">
+                            {errorMessage}
                         </p>
-                        <h3 
-                            className="text-[15px] font-[khula-semi-bold] cursor-pointer"
-                            onClick={() => {setButtonClicked("login"), clearData()}}
-                        >
-                            Log in
-                        </h3>
                     </div>
-                    
-                    <motion.input 
-                        whileHover={{ scale: 1.07 }}
-                        whileTap={{ scale: 0.75 }}
-                        type="submit" 
-                        value="Create account" 
-                        onClick={() => {handleSubmit()}}
-                        className="w-fit bg-[var(--black2white)] text-[18px] text-[var(--white2black)] font-[heebo-medium] rounded-[8px] px-[16px] py-[10px] cursor-pointer"
-                    />
+                    <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-[4px]">
+                            <p className="text-[14px] font-[khula-regular] cursor-default">
+                                Already have an account?
+                            </p>
+                            <h3
+                                className="text-[15px] font-[khula-semi-bold] cursor-pointer"
+                                onClick={() => {
+                                    setButtonClicked("login");
+                                    clearData();
+                                }}
+                            >
+                                Log in
+                            </h3>
+                        </div>
+
+                        <motion.input
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.85 }}
+                            type="submit"
+                            value="Create account"
+                            onClick={handleSubmit}
+                            className="w-fit bg-[var(--black2white)] text-[18px] text-[var(--white2black)] font-[heebo-medium] rounded-[8px] px-[16px] py-[10px] cursor-pointer"
+                        />
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }
 
 CreateAccountForm.propTypes = {
     setButtonClicked: PropTypes.func.isRequired,
-    data: PropTypes.array,
+    data: PropTypes.object.isRequired,
     handleChange: PropTypes.func.isRequired,
-    validateData: PropTypes.func.isRequired,
     clearData: PropTypes.func.isRequired,
+    setSuccessfulAuthentication: PropTypes.func.isRequired,
 };
 
 export { CreateAccountForm };

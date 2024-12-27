@@ -1,14 +1,55 @@
 // System
+import { useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
+
+// Controllers
+import { UserController } from "../../../shared/controllers/user/UserController";
 
 // Components
 import { Input } from "../../../shared/components/ui/Input";
 
-function LoginForm({ setButtonClicked, data, handleChange, validateData, clearData }) {
+// Functions
+import { getPasswordStrengthColor, isValidPasswordColor, isValidEmail } from "../../../shared/func/Athentification.func";
+
+// Redux
+import { useDispatch } from 'react-redux';
+import { Login } from '../../../redux/slices/AuthentificationSlice'; 
+
+function LoginForm({ setButtonClicked, data, handleChange, clearData, setSuccessfulAuthentication }) {
+    const { response, errorMessage, setErrorMessage, LoginAccount } = UserController();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        const handleResponse = async () => {
+            if (response) {
+                dispatch(Login());
+                setSuccessfulAuthentication(true);
+                await new Promise((resolve) => setTimeout(resolve, 2000));
+                clearData();
+                navigate("/note-area");
+            }
+        };
+    
+        handleResponse();
+    }, [response, dispatch, navigate, setSuccessfulAuthentication, clearData]);
+
+    // Handle input field changes
+        const handleInputChange = useCallback((name, value) => {
+            setErrorMessage(""); // Clear any previous error messages
+            handleChange(name, value);
+        }, [setErrorMessage, handleChange]);
 
     const handleSubmit = () => {
-        validateData(data);
+        const passwordStrengthColor = getPasswordStrengthColor(data.password || "");
+        if (!isValidEmail(data.email) || !isValidPasswordColor(passwordStrengthColor)) {
+            setErrorMessage("Email or password is not valid!");
+            return;
+        }
+
+        LoginAccount(data);
     };
 
     return (
@@ -18,14 +59,14 @@ function LoginForm({ setButtonClicked, data, handleChange, validateData, clearDa
                 name="email" 
                 placeholder="Email" 
                 value={data.email || ""} 
-                handleChange={handleChange} 
+                handleChange={handleInputChange} 
             />
             <Input 
                 type="password" 
                 name="password" 
                 placeholder="Password" 
                 value={data.password || ""} 
-                handleChange={handleChange} 
+                handleChange={handleInputChange} 
             />
             <div className="flex justify-end items-center">
                 <p 
@@ -35,7 +76,10 @@ function LoginForm({ setButtonClicked, data, handleChange, validateData, clearDa
                     Forgot password?
                 </p>
             </div>
-            <div>
+            <div className="grid gap-[10px]">
+                <div className="w-full mt-[-5px]">
+                    <p className="text-[16px] font-[khula-regular] text-[var(--red)] cursor-default">{errorMessage}</p> 
+                </div>
                 <div className="flex justify-between items-center">
                     <div className="flex items-center gap-[4px]">
                         <p className="text-[14px] font-[khula-regular] cursor-default">
@@ -67,8 +111,9 @@ LoginForm.propTypes = {
     setButtonClicked: PropTypes.func.isRequired,
     data: PropTypes.object,
     handleChange: PropTypes.func.isRequired,
-    validateData: PropTypes.func.isRequired,
+    validateEmmail: PropTypes.func.isRequired,
     clearData: PropTypes.func.isRequired,
+    setSuccessfulAuthentication: PropTypes.func.isRequired,
 };
 
 export { LoginForm };

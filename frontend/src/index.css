@@ -98,6 +98,7 @@
   --white2black: #FFFDF7;
   --black2white: #212121;
   --skyWhite2skyBlack: #DEDEDE;
+  --skyBlack2skyWhite: #2F2F2F;
   --placeholder: #7C7C7C;
 }
 
@@ -108,5 +109,6 @@
   --white2black: #212121;
   --black2white: #FFFDF7;
   --skyWhite2skyBlack: #2F2F2F;
+  --skyBlack2skyWhite: #DEDEDE;
   --placeholder: #979693;
 }

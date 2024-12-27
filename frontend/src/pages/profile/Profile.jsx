@@ -1,130 +1,183 @@
 // System
-import { useState, useCallback } from "react";
-import { motion } from "motion/react";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+
+// Controllers
+import { UserController } from "../../shared/controllers/user/UserController";
 
 // Components
-import { Picture } from "../../shared/components/ui/Picture";
 import { Input } from "../../shared/components/ui/Input";
 import { SubHeader } from "../../shared/components/ui/SubHeader";
+import { ChangePasswordButton } from "./components/ui/ChangePasswordButton";
+
+// Redux
+import { useDispatch } from "react-redux";
+import { Logout, DeleteAccount as deleteRedux } from "../../redux/slices/AuthentificationSlice";
 
 // Icons
 import { Logo } from "../../shared/assets/icons/Logo.icon";
 import { DeleteNote } from "../../shared/assets/icons/DeleteNote.icon";
 import { Logout as LogoutIcon } from "../../shared/assets/icons/Logout.icon";
+import { SuccessfulPopUp } from "../../shared/components/ui/SuccessfulPopUp";
+import { Warning as WarningIcon } from "../../shared/assets/icons/Warning.icon";
+
+// Pictures
+import { Picture } from "../../shared/components/ui/Picture";
 
 function Profile() {
-    const [data, setData] = useState({
-        user_name: "",
-        email: "",
-        password: "",
-    });
+    const { response, setResponse, errorMessage, setErrorMessage, Profile, UpdateAccount, DeleteAccount } = UserController();
+    const [showSuccessfulAuthentication, setSuccessfulAuthentication] = useState(false);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const [data, setData] = useState({ name: "", email: "", password: "" });
 
-    const handleChange = useCallback((name, value) => {
-        setData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
-    }, []);
+    // Fetch profile data on mount if not already present
+    useEffect(() => {
+        if (!response) {
+            Profile().catch((err) => console.error("Profile fetch error:", err));
+        }
+    }, [Profile, response]);
 
-    const handleDelete = () => {
-        // Delete user from database
-        console.log("Deleting user", data.email);
-    };
+    // Update local state when response changes
+    useEffect(() => {
+        if (response) {
+            const { name = "", email = "" } = response;
+            setData((prevData) => ({ ...prevData, name, email }));
+        }
+    }, [response]);
 
-    const handleLogout = () => {
-        // Logout user
-        console.log("Logging out", data.email);
-    };
+    const handleChange = useCallback(
+        (name, value) => {
+            setData((prevData) => ({ ...prevData, [name]: value }));
+            if (errorMessage) setErrorMessage(""); // Reset error on change
+        },
+        [errorMessage, setErrorMessage]
+    );
 
-    const handleSubmit = () => {
-        // Update user data in database
-        console.log("Updating user", data.email);
-    }
-    
-    return (
-        <div className="grid grid-flow-col auto-cols-[auto_1fr] w-full h-full pl-[20px] py-[20px]">
-            <motion.div 
-                initial={{ x: -1000 }}
+    const handleSubmit = useCallback(async () => {
+        try {
+            setResponse("");
+            await UpdateAccount(data);
+            setSuccessfulAuthentication(true);
+            setTimeout(() => setSuccessfulAuthentication(false), 2000);
+        } catch (err) {
+            console.error("Error during submission:", err);
+        }
+    }, [data, UpdateAccount, setResponse]);
+
+    const handleDelete = useCallback(async () => {
+        try {
+            await DeleteAccount(data);
+            if (response === "User deleted successfully") {
+                setSuccessfulAuthentication(true);
+                setTimeout(() => {
+                    dispatch(deleteRedux());
+                    localStorage.removeItem("token");
+                    navigate("/");
+                }, 2000);
+            }
+        } catch (err) {
+            console.error("Error during deletion:", err);
+        }
+    }, [data, response, DeleteAccount, dispatch, navigate]);
+
+    const handleLogout = useCallback(() => {
+        localStorage.removeItem("token");
+        dispatch(Logout());
+        navigate("/");
+    }, [dispatch, navigate]);
+
+    const renderSuccessfulPopUp = useMemo(() => {
+        if (!showSuccessfulAuthentication) return null;
+        return (
+            <motion.div
+                layout
+                initial={{ x: 1000 }}
                 animate={{ x: 0 }}
-                className="h-full w-fit max-w-[300px] z-10"
+                transition={{ duration: 0.5, type: "spring", stiffness: 80 }}
+                className="absolute z-10 flex justify-center items-center w-[calc(100%-400px)] h-full rounded-[30px]"
             >
+                <SuccessfulPopUp />
+            </motion.div>
+        );
+    }, [showSuccessfulAuthentication]);
+
+    return (
+        <div 
+            id="profile_container"
+            className="grid grid-flow-col auto-cols-[auto_1fr] w-full h-full pl-[20px] py-[20px]"
+        >
+            <motion.div initial={{ x: -1000 }} animate={{ x: 0 }} className="h-full w-fit max-w-[300px] z-10">
                 <Picture />
             </motion.div>
             <motion.div 
                 initial={{ x: 1000 }}
                 animate={{ x: 0 }}
-                className="relative flex flex-col content-center justify-center w-full h-full px-[200px] gap-y-[20px]"
+                id="profile"
+                className="relative flex justify-center items-center w-full h-full"
             >
-                <SubHeader location={"note-area"} />
-                <div className="grid justify-center w-full cursor-default">
-                    <div className="flex justify-center w-full">
-                        <Logo width={50} height={50} />
+                <div className="relative flex flex-col content-center justify-items-center justify-center w-full h-full px-[200px] gap-y-[20px]">
+                    {renderSuccessfulPopUp}
+                    <SubHeader location="/note-area" />
+                    <div className="grid justify-center w-full cursor-default">
+                        <div className="flex justify-center w-full">
+                            <Logo width={50} height={50} />
+                        </div>
+                        <div className="flex flex-col">
+                            <h1 className="text-[34px] text-center font-[merriweather-sans-bold] w-full">Profile</h1>
+                        </div>
                     </div>
-                    <div className="flex flex-col">
-                        <h1 className="text-[34px] text-center font-[merriweather-sans-bold] w-full"> 
-                            Get started
-                        </h1>
+                    <Input name="name" placeholder="Name" value={data.name} handleChange={handleChange} />
+                    <Input type="email" name="email" placeholder="Email" value={data.email} handleChange={handleChange} />
+                    <div className="grid gap-[14px]">
+                        <Input type="password" name="password" placeholder="Password" value={data.password} handleChange={handleChange} />
+                        <ChangePasswordButton />
                     </div>
-                </div>
-                <Input
-                    name="user_name" 
-                    placeholder="User name" 
-                    value={data.user_name || ""} 
-                    handleChange={handleChange} 
-                />
-                <Input
-                    type="email" 
-                    name="email" 
-                    placeholder="Email" 
-                    value={data.email || ""} 
-                    handleChange={handleChange} 
-                />
-                <div className="grid gap-[14px]">
-                    <Input
-                        type="password" 
-                        name="password" 
-                        placeholder="Password" 
-                        value={data.password || ""} 
-                        handleChange={handleChange}
-                    />
-                    <div className="flex items-center">
-                        <p 
-                            className="w-fit text-[14px] text-[var(--red)] font-[khula-regular] cursor-pointer"
-                            onClick={() => {}}
+                    <div className="w-full mt-[-5px]">
+                        {errorMessage && 
+                            <div className="flex justify-center items-center w-full gap-x-[10px]">
+                                <WarningIcon />
+                                <p
+                                    id="error-message"
+                                    className="flex items-center justify-center h-fit text-[16px] text-center font-[khula-regular] text-[var(--red)] cursor-default"
+                                >
+                                {errorMessage}
+                                </p>
+                            </div> 
+                        }
+                    </div>
+                    <div className="flex justify-end items-center gap-x-[14px]">
+                        <motion.div
+                            whileHover={{ scale: 1.07 }}
+                            whileTap={{ scale: 0.75 }}
+                            className="bg-[var(--red)] rounded-[8px] px-[14px] py-[10px] cursor-pointer"
+                            onClick={handleDelete}
                         >
-                            Change password
-                        </p>
+                            <DeleteNote width={18} height={20} />
+                        </motion.div>
+                        <motion.div
+                            whileHover={{ scale: 1.07 }}
+                            whileTap={{ scale: 0.75 }}
+                            className="bg-[var(--yellow)] rounded-[8px] px-[14px] py-[10px] cursor-pointer"
+                            onClick={handleLogout}
+                        >
+                            <LogoutIcon />
+                        </motion.div>
+                        <motion.div
+                            whileHover={{ scale: 1.07 }}
+                            whileTap={{ scale: 0.75 }}
+                            className="flex items-center justify-center h-[40px] bg-[var(--black2white)] rounded-[8px] px-[14px] py-[10px] cursor-pointer"
+                            onClick={handleSubmit}
+                        >
+                            <p className="w-fit text-[var(--white2black)] font-[heebo-medium]">Modifie</p>
+                        </motion.div>
                     </div>
-                </div>
-                <div className="flex justify-end items-center gap-x-[14px]">
-                    <motion.div 
-                        whileHover={{ scale: 1.07 }}
-                        whileTap={{ scale: 0.75 }}
-                        className="bg-[var(--red)] rounded-[8px] px-[14px] py-[10px]"
-                        onClick={() => {handleDelete()}}
-                    >
-                        <DeleteNote width={18} height={20} />
-                    </motion.div>
-                    <motion.div 
-                        whileHover={{ scale: 1.07 }}
-                        whileTap={{ scale: 0.75 }}
-                        className="bg-[var(--yellow)] rounded-[8px] px-[14px] py-[10px]"
-                        onClick={() => {handleLogout()}}
-                    >
-                        <LogoutIcon />
-                    </motion.div>
-                    <motion.div 
-                        whileHover={{ scale: 1.07 }}
-                        whileTap={{ scale: 0.75 }}
-                        className="flex items-center justify-center h-[40px] bg-[var(--black2white)] rounded-[8px] px-[14px] py-[10px]"
-                        onClick={() => {handleSubmit()}}
-                    >
-                        <p className="w-fit text-[var(--white2black)] font-[heebo-medium]">Modifie</p>
-                    </motion.div>
                 </div>
             </motion.div>
+            
         </div>
-    )
+    );
 }
 
 export { Profile };

@@ -1,13 +1,13 @@
 // System
 import { useState, useCallback } from "react";
 import { motion } from "framer-motion";
-import validator from "validator";
 
-// Controller
+// Controllers
 import { UserController } from "../../shared/controllers/user/UserController";
 
 // Components
 import { Picture } from "../../shared/components/ui/Picture";
+import { SuccessfulPopUp } from "../../shared/components/ui/SuccessfulPopUp";
 import { CreateAccountForm } from "./components/CreateAccountForm";
 import { LoginForm } from "./components/LoginForm";
 import { SubHeader } from "../../shared/components/ui/SubHeader";
@@ -16,24 +16,22 @@ import { SubHeader } from "../../shared/components/ui/SubHeader";
 import { Logo } from "../../shared/assets/icons/Logo.icon";
 
 function Authentication() {
-    const { responce} = UserController();
-    console.log(responce)
+    const { setErrorMessage } = UserController();
     const [buttonClicked, setButtonClicked] = useState("create_account");
-    const [data, setData] = useState({});
+    const [showSuccessfulAuthentication, setSuccessfulAuthentication] = useState(false);
+    const [data, setData] = useState({
+        name: "",
+        email: "",
+        password: "",
+    });
 
     const handleChange = useCallback((name, value) => {
+        setErrorMessage("");
         setData((prevData) => ({
             ...prevData,
             [name]: value,
         }));
-    }, []);
-
-    const validateData = useCallback((data) => {
-        if (validator.isEmail(data.email)) {
-            return true;
-        }
-        return false;
-    }, []);
+    }, [setErrorMessage]);
 
     const clearData = useCallback(() => {
         setData({});
@@ -69,12 +67,20 @@ function Authentication() {
                 className={`relative flex flex-col items-center justify-center h-full flex-[2] min-w-[480px] text-center text-[var(--black2white)] px-[100px] ${
                     buttonClicked === "create_account" ? "order-1" : "order-2"
                 }`}
-                style={{
-                    zIndex: 1,
-                }}
-            >   
+            >
                 <SubHeader location={"/"} />
+                
                 <div className="flex flex-col items-center justify-center w-full h-full gap-y-[30px]">
+                    {showSuccessfulAuthentication &&
+                        <motion.div 
+                            layout
+                            initial={{ x: buttonClicked === "create_account" ?  -1000 : 1000  }}
+                            animate={{ x: 0 }}
+                            transition={{ duration: 0.5, type: "spring", stiffness: 80 }}
+                            className="absolute z-10 flex justify-center items-center w-[calc(100%-200px)] h-full rounded-[30px]">
+                            <SuccessfulPopUp />
+                        </motion.div>
+                    }
                     <div className="grid justify-center w-full cursor-default">
                         <div className="flex justify-center w-full">
                             <Logo width={50} height={50} />
@@ -102,11 +108,11 @@ function Authentication() {
                             or
                         </p>
 
-                        <div>
+                        <div className="relative z-8">
                             {buttonClicked === "create_account" ? (
-                                <CreateAccountForm setButtonClicked={setButtonClicked} data={data} handleChange={handleChange} validateData={validateData} clearData={clearData} />
+                                <CreateAccountForm setButtonClicked={setButtonClicked} data={data} handleChange={handleChange} clearData={clearData} setSuccessfulAuthentication={setSuccessfulAuthentication} />
                             ) : (
-                                <LoginForm setButtonClicked={setButtonClicked} data={data} handleChange={handleChange} validateData={validateData} clearData={clearData} />
+                                <LoginForm setButtonClicked={setButtonClicked} data={data} handleChange={handleChange} clearData={clearData} setSuccessfulAuthentication={setSuccessfulAuthentication} />
                             )}
                         </div>
                     </div>

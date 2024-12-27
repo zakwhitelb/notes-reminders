@@ -1,25 +1,24 @@
 import axios from "axios";
+import { jwtDecode } from "jwt-decode"; // Fix named import
 
-async function getOne(setErrorMessage, setResponse) {
+async function getOne(setErrorMessage) {
     try {
-        // Retrieve token from localStorage
-        const token = localStorage.getItem("token");
+        const token = JSON.parse(localStorage.getItem("token"));
+        
         if (!token) {
             throw new Error("Token is missing");
         }
 
-        // Make request to the endpoint with token in Authorization header
-        const response = await axios.get("http://localhost:5000/user", {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        const decodedToken = jwtDecode(token);
+        const userId = decodedToken.userId; // Ensure this is correct in your token payload
 
-        // Set response
-        setResponse(response.data.user);
+        // Make request to backend
+        const response = await axios.get(`http://localhost:4000/users/${userId}`);
+
+        return response;
     } catch (err) {
-        console.error(err);
-        setErrorMessage(err.response?.data?.error || "An error occurred");
+        setErrorMessage(err.response?.data?.message || "An error occurred");
+        throw err;
     }
 }
 

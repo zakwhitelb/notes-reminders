@@ -8,10 +8,10 @@ import { Theme } from "../active-icons/Theme";
 function SubHeader({ location }) {
     return (
         <>
-            <div className="absolute top-[20px] left-[40px]">
+            <div className="absolute z-11 top-[20px] left-[40px]">
                 <RollBack location={location} />
             </div>
-            <div className="absolute top-[20px] right-[40px]">
+            <div className="absolute z-11 top-[20px] right-[40px]">
                 <Theme />
             </div>
         </>
@@ -19,7 +19,7 @@ function SubHeader({ location }) {
 }
 
 SubHeader.propTypes = {
-    location: PropTypes.object.isRequired,
+    location: PropTypes.string.isRequired,
 };
 
 SubHeader.defaultProps = {

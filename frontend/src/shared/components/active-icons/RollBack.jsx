@@ -26,7 +26,7 @@ function RollBack({ location }) {
 }
 
 RollBack.propTypes = {
-    location: PropTypes.object.isRequired,
+    location: PropTypes.string.isRequired,
 };
 
 export { RollBack };

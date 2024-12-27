@@ -4,8 +4,8 @@ function Input({ type, name, placeholder, value, handleChange, colorPassword, cr
     return (
         <div className="flex flex-col gap-[10px]">
             <label 
-                htmlFor="user_name"
-                className="text-start text-[18px] font-[heebo-semi-bold]"
+                htmlFor={name}
+                className="text-start text-[18px] text-[var(--black2white)] font-[heebo-semi-bold]"
             >
                 {placeholder}
             </label>
@@ -17,7 +17,8 @@ function Input({ type, name, placeholder, value, handleChange, colorPassword, cr
                         placeholder={placeholder} 
                         value={value} 
                         onChange={(e) => {handleChange(name, e.target.value)}}
-                        className="flex items-center w-full h-full bg-[var(--skyWhite2skyBlack)] text-[16px] font-[heebo-regular] outline-none focus:border-[1px] focus:border-r-0 focus:border-[var(--black2white)] placeholder:text-[var(--placeholder)] placeholder:font-[heebo-regular] rounded-l-[8px] px-[14px]"
+                        className="flex items-center w-full h-full bg-[var(--skyWhite2skyBlack)] text-[16px] text-[var(--black2white)] font-[heebo-regular] outline-none focus:border-[1px] focus:border-r-0 focus:border-[var(--black2white)] placeholder:text-[var(--placeholder)] placeholder:font-[heebo-regular] rounded-l-[8px] px-[14px]"
+                        required
                     />
                     <div className={`w-[15px] h-full rounded-r-[8px] ${colorPassword}`}></div>
                 </div>
@@ -27,7 +28,8 @@ function Input({ type, name, placeholder, value, handleChange, colorPassword, cr
                     placeholder={placeholder} 
                     value={value} 
                     onChange={(e) => {handleChange(name, e.target.value)}}
-                    className="flex items-center h-[40px] bg-[var(--skyWhite2skyBlack)] text-[16px] font-[heebo-regular] outline-none focus:border-[1px] focus:border-[var(--black2white)] placeholder:text-[var(--placeholder)] placeholder:font-[heebo-regular] rounded-[8px] px-[14px]"
+                    className="flex items-center h-[40px] bg-[var(--skyWhite2skyBlack)] text-[16px] text-[var(--black2white)] font-[heebo-regular] outline-none focus:border-[1px] focus:border-[var(--black2white)] placeholder:text-[var(--placeholder)] placeholder:font-[heebo-regular] rounded-[8px] px-[14px]"
+                    required
                 />
             }
         </div>
