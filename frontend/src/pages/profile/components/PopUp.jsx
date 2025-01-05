@@ -1,13 +1,14 @@
 // System
 import PropTypes from "prop-types";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { motion } from "motion/react";
 
 // Controllers
 import { UserController } from "../../../shared/controllers/user/UserController";
 
 // Components
-import  { Input } from "../../../shared/components/ui/Input";
+import { Input } from "../../../shared/components/ui/Input";
+import { SuccessfulPopUp } from "../../../shared/components/ui/SuccessfulPopUp";
 
 // Functions
 import { getPasswordStrengthColor, isValidPasswordColor } from "../../../shared/func/Athentification.func";
@@ -19,6 +20,7 @@ function PopUp({ handleClickChangePassword }) {
     const { errorMessage, setErrorMessage, UpdatePassword } = UserController();
     const [newPasswordStrengthColor, setNewPasswordStrengthColor] = useState("bg-[var(--red)]");
     const [confPasswordStrengthColor, setConfPasswordStrengthColor] = useState("bg-[var(--red)]");
+    const [showSuccessfulWork, setSuccessfulWork] = useState(false);
     const [ data, setData ] = useState({
         password: "", 
         newPassword: "",
@@ -41,19 +43,49 @@ function PopUp({ handleClickChangePassword }) {
         }));
     }, [setErrorMessage]);
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if(!isValidPasswordColor(newPasswordStrengthColor) || !isValidPasswordColor(confPasswordStrengthColor)){
-            setErrorMessage("new password or confirm Password is not valid!");
+            if(!isValidPasswordColor(newPasswordStrengthColor) && !isValidPasswordColor(confPasswordStrengthColor)){
+                setErrorMessage("New password and confirm password are not valid!");
+                return;
+            } 
+            setErrorMessage(!isValidPasswordColor(newPasswordStrengthColor)? "New password is not valid!" : "Confirm password is not valid!");
             return;
         }
 
         if(data.newPassword !== data.confirmPassword) {
-            setErrorMessage("new password not equal confirm Password!");
+            setErrorMessage("new password not equal the confirm Password!");
             return;
         }
 
-        UpdatePassword(data);
+        try {
+            await UpdatePassword(data);
+            
+            setSuccessfulWork(true);
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+            setSuccessfulWork(false)
+            handleClickChangePassword();
+        } 
+        catch (err) {
+            console.error("Error during submission:", err);
+        }
+        
     };
+
+    const renderSuccessfulPopUp = useMemo(() => {
+        if (!showSuccessfulWork) return null;
+        return (
+            <motion.div
+                layout
+                initial={{ x: 1000 }}
+                animate={{ x: 0 }}
+                transition={{ duration: 0.5, type: "spring", stiffness: 80 }}
+                className="absolute z-10 flex justify-center items-center w-[calc(100%-400px)] h-full rounded-[30px]"
+            >
+                <SuccessfulPopUp />
+            </motion.div>
+        );
+    }, [showSuccessfulWork]);
 
     return (
         <div
@@ -64,6 +96,7 @@ function PopUp({ handleClickChangePassword }) {
                 animate={{ scale: 1, opacity: 1 }}
                 className="relative grid w-[680px] h-fit bg-[var(--white2black)] rounded-[20px] px-[100px] py-[30px] gap-[40px] duration-[0.15s] ease-linear"
             >
+                {renderSuccessfulPopUp}
                 <motion.div 
                     whileHover={{ scale: 1.07 }}
                     whileTap={{ scale: 0.75 }}
@@ -113,7 +146,7 @@ function PopUp({ handleClickChangePassword }) {
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.85 }}
                                 type="submit"
-                                value="Create account"
+                                value="Change password"
                                 onClick={handleSubmit}
                                 className="w-fit bg-[var(--black2white)] text-[18px] text-[var(--white2black)] font-[heebo-medium] rounded-[8px] px-[16px] py-[10px] cursor-pointer"
                             />

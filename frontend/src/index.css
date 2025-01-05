@@ -13,6 +13,11 @@
 }
 
 @font-face {
+  font-family: "merriweather-sans-extra-bold";
+  src: local("merriweather-sans"), url("./shared/assets/fonts/merriweather-sans/MerriweatherSansExtraBold.ttf") format("truetype");
+}
+
+@font-face {
   font-family: "khula-regular";
   src: local("khula"), url("./shared/assets/fonts/khula/KhulaRegular.ttf") format("truetype");
 }

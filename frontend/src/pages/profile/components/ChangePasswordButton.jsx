@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion } from "motion/react";
 
 // Components
-import { PopUp } from "../PopUp";
+import { PopUp } from "./PopUp";
 
 function ChangePasswordButton() {
     const [isPopupVisible, setIsPopupVisible] = useState(false);

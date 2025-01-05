@@ -1,13 +1,18 @@
-GET http://localhost:4000/users
+GET http://localhost:4000/notes/676e9153a4fed6e39659aadf
 
 ###
 
-PATCH http://localhost:4000/users/password/676e9153a4fed6e39659aadf
+POST  http://localhost:4000/notes/676e9153a4fed6e39659aadf
 Content-Type: application/json
 
 {
-    "password": "hhhhhhhh",
-    "newPassword": "12345678"
+    "title": "zhfozeh",
+    "description": "Description test z",
+    "day": "2023-12-30",
+    "hour": 15,
+    "min": 30,
+    "status": "incomplete",
+    "userId": "676e9153a4fed6e39659aadf"
 }
 
 ###

@@ -1,5 +1,7 @@
 // System
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import { useSelector } from "react-redux";
 
 // Styles
 import "./shared/styles/GlobaleStyle.css";
@@ -23,8 +25,9 @@ function App() {
 }
 
 function MainLayout() {
+  const isLoggedIn = useSelector((state) => state.authentification_status.value);
   const location = useLocation(); 
-  const hideHeaderRoutes = ["/authentication", "/profile"]; 
+  const hideHeaderRoutes = isLoggedIn ? ["/authentication", "/profile"] : ["/authentication"]; 
 
   const shouldHideHeader = hideHeaderRoutes.includes(location.pathname); 
 
@@ -33,7 +36,7 @@ function MainLayout() {
       {!shouldHideHeader && <Header />} 
       <Routes>
         <Route path="/" element={<Home />}/>
-        <Route path="/authentication" element={<Authentication />}/>
+        <Route path="/authentication" element={<GoogleOAuthProvider clientId="784968071047-8uvivas0comahu7omgfqp84ei46f18a7.apps.googleusercontent.com"><Authentication /></GoogleOAuthProvider>}/>
         <Route path="/note-area" element={<NoteArea />}/>
         <Route path="/profile" element={<Profile />}/>
         <Route path="/*" element={<Error404 />}/>

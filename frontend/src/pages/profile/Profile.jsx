@@ -1,7 +1,7 @@
 // System
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { useSelector } from 'react-redux';
 
 // Controllers
 import { UserController } from "../../shared/controllers/user/UserController";
@@ -9,7 +9,8 @@ import { UserController } from "../../shared/controllers/user/UserController";
 // Components
 import { Input } from "../../shared/components/ui/Input";
 import { SubHeader } from "../../shared/components/ui/SubHeader";
-import { ChangePasswordButton } from "./components/ui/ChangePasswordButton";
+import { ChangePasswordButton } from "./components/ChangePasswordButton";
+import { Error404 } from "../error/Error404"; // Import Error404 component
 
 // Redux
 import { useDispatch } from "react-redux";
@@ -26,9 +27,19 @@ import { Warning as WarningIcon } from "../../shared/assets/icons/Warning.icon";
 import { Picture } from "../../shared/components/ui/Picture";
 
 function Profile() {
-    const { response, setResponse, errorMessage, setErrorMessage, Profile, UpdateAccount, DeleteAccount } = UserController();
-    const [showSuccessfulAuthentication, setSuccessfulAuthentication] = useState(false);
-    const navigate = useNavigate();
+    const isLoggedIn = useSelector((state) => state.authentification_status.value);
+    console.log(isLoggedIn);
+    const {
+        response,
+        setResponse,
+        errorMessage,
+        setErrorMessage,
+        Profile,
+        UpdateAccount,
+        DeleteAccount
+    } = UserController();
+
+    const [showSuccessfulWork, setSuccessfulWork] = useState(false);
     const dispatch = useDispatch();
     const [data, setData] = useState({ name: "", email: "", password: "" });
 
@@ -59,9 +70,10 @@ function Profile() {
         try {
             setResponse("");
             await UpdateAccount(data);
-            setSuccessfulAuthentication(true);
-            setTimeout(() => setSuccessfulAuthentication(false), 2000);
-        } catch (err) {
+            setSuccessfulWork(true);
+            setTimeout(() => setSuccessfulWork(false), 2000);
+        } 
+        catch (err) {
             console.error("Error during submission:", err);
         }
     }, [data, UpdateAccount, setResponse]);
@@ -70,26 +82,26 @@ function Profile() {
         try {
             await DeleteAccount(data);
             if (response === "User deleted successfully") {
-                setSuccessfulAuthentication(true);
+                setSuccessfulWork(true);
                 setTimeout(() => {
                     dispatch(deleteRedux());
                     localStorage.removeItem("token");
-                    navigate("/");
+                    window.location.href = "/";
                 }, 2000);
             }
         } catch (err) {
             console.error("Error during deletion:", err);
         }
-    }, [data, response, DeleteAccount, dispatch, navigate]);
+    }, [data, response, DeleteAccount, dispatch]);
 
     const handleLogout = useCallback(() => {
         localStorage.removeItem("token");
         dispatch(Logout());
-        navigate("/");
-    }, [dispatch, navigate]);
+        window.location.href = "/";
+    }, [dispatch]);
 
     const renderSuccessfulPopUp = useMemo(() => {
-        if (!showSuccessfulAuthentication) return null;
+        if (!showSuccessfulWork) return null;
         return (
             <motion.div
                 layout
@@ -101,17 +113,26 @@ function Profile() {
                 <SuccessfulPopUp />
             </motion.div>
         );
-    }, [showSuccessfulAuthentication]);
+    }, [showSuccessfulWork]);
+
+    // Check if user is unauthenticated or there's an error fetching profile
+    if (!isLoggedIn) {
+        return <Error404 />;
+    }
 
     return (
-        <div 
+        <div
             id="profile_container"
             className="grid grid-flow-col auto-cols-[auto_1fr] w-full h-full pl-[20px] py-[20px]"
         >
-            <motion.div initial={{ x: -1000 }} animate={{ x: 0 }} className="h-full w-fit max-w-[300px] z-10">
+            <motion.div
+                initial={{ x: -1000 }}
+                animate={{ x: 0 }}
+                className="h-full w-fit max-w-[300px] z-10"
+            >
                 <Picture />
             </motion.div>
-            <motion.div 
+            <motion.div
                 initial={{ x: 1000 }}
                 animate={{ x: 0 }}
                 id="profile"
@@ -125,27 +146,46 @@ function Profile() {
                             <Logo width={50} height={50} />
                         </div>
                         <div className="flex flex-col">
-                            <h1 className="text-[34px] text-center font-[merriweather-sans-bold] w-full">Profile</h1>
+                            <h1 className="text-[34px] text-center font-[merriweather-sans-bold] w-full">
+                                Profile
+                            </h1>
                         </div>
                     </div>
-                    <Input name="name" placeholder="Name" value={data.name} handleChange={handleChange} />
-                    <Input type="email" name="email" placeholder="Email" value={data.email} handleChange={handleChange} />
+                    <Input
+                        name="name"
+                        placeholder="Name"
+                        value={data.name}
+                        handleChange={handleChange}
+                    />
+                    <Input
+                        type="email"
+                        name="email"
+                        placeholder="Email"
+                        value={data.email}
+                        handleChange={handleChange}
+                    />
                     <div className="grid gap-[14px]">
-                        <Input type="password" name="password" placeholder="Password" value={data.password} handleChange={handleChange} />
+                        <Input
+                            type="password"
+                            name="password"
+                            placeholder="Password"
+                            value={data.password}
+                            handleChange={handleChange}
+                        />
                         <ChangePasswordButton />
                     </div>
                     <div className="w-full mt-[-5px]">
-                        {errorMessage && 
+                        {errorMessage && (
                             <div className="flex justify-center items-center w-full gap-x-[10px]">
                                 <WarningIcon />
                                 <p
                                     id="error-message"
                                     className="flex items-center justify-center h-fit text-[16px] text-center font-[khula-regular] text-[var(--red)] cursor-default"
                                 >
-                                {errorMessage}
+                                    {errorMessage}
                                 </p>
-                            </div> 
-                        }
+                            </div>
+                        )}
                     </div>
                     <div className="flex justify-end items-center gap-x-[14px]">
                         <motion.div
@@ -170,12 +210,13 @@ function Profile() {
                             className="flex items-center justify-center h-[40px] bg-[var(--black2white)] rounded-[8px] px-[14px] py-[10px] cursor-pointer"
                             onClick={handleSubmit}
                         >
-                            <p className="w-fit text-[var(--white2black)] font-[heebo-medium]">Modifie</p>
+                            <p className="w-fit text-[var(--white2black)] font-[heebo-medium]">
+                                Modifie
+                            </p>
                         </motion.div>
                     </div>
                 </div>
             </motion.div>
-            
         </div>
     );
 }

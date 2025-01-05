@@ -14,7 +14,6 @@ function SearchNote() {
 
     const handleInputChange = (e) => {
         const value = e.target.value;
-        console.log(value);
         // Dispatch the appropriate action based on input
         if (!value.trim()) {
             dispatch(ClearSearch());

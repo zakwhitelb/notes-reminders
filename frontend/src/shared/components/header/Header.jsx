@@ -1,5 +1,5 @@
 // System
-import { useSelector } from 'react-redux'; // Import hook to access Redux state
+import { useSelector } from 'react-redux';
 
 // Active icons
 import { Logo } from '../active-icons/Logo';

@@ -64,6 +64,36 @@ exports.loginUser = async (req, res) => {
     }
 };
 
+exports.googleLoginUser = async (req, res) => {
+    try {
+        const { name, email } = req.body;
+        const user = await USER.findOne({ email });
+
+        // Validate input
+        if (!name || !email) {
+            return res.status(400).json({ message: "Name and email are required." });
+        }
+
+        if (!user) {
+            const HASHEDPASSWORD = await bcrypt.hash("00000000", 10);
+            const newUser = new USER({
+                name: name,
+                email: email,
+                password: HASHEDPASSWORD,
+            });
+
+            const token = jwt.sign({ userId: newUser._id }, JWT_SECRET, { expiresIn: "1h" });
+            res.status(201).json({ token });
+        }
+
+        const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: "1h" });
+        res.status(200).json({ token });
+    } 
+    catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
 // Updating a user
 exports.updateUser = async (req, res) => {
     try {
@@ -103,6 +133,7 @@ exports.updateUserPassword = async (req, res) => {
 
         // Validate old password
         const isPasswordValid = await bcrypt.compare(req.body.password, user.password);
+        
         if (!isPasswordValid) {
             return res.status(401).json({ message: "Invalid current password" });
         }
@@ -131,11 +162,9 @@ exports.deleteUser = async (req, res) => {
         if (!isPasswordValid) {
             return res.status(401).json({ message: "Invalid password" });
         }
-
         if (!email || email !== user.email) {
             return res.status(402).json({ message: "Email not valid!" });
         }
-
         // Delete the user
         await user.deleteOne();
 

@@ -7,6 +7,7 @@ import { UserController } from "../../shared/controllers/user/UserController";
 
 // Components
 import { Picture } from "../../shared/components/ui/Picture";
+import { GoogleAthentification } from "./components/GoogleAthentification";
 import { SuccessfulPopUp } from "../../shared/components/ui/SuccessfulPopUp";
 import { CreateAccountForm } from "./components/CreateAccountForm";
 import { LoginForm } from "./components/LoginForm";
@@ -95,15 +96,8 @@ function Authentication() {
                         </div>
                     </div>
                     <div className="grid gap-[20px] w-full">
-                        <motion.div
-                            whileHover={{ scale: 1.06 }}
-                            whileTap={{ scale: 0.90 }}
-                            className="w-full bg-[var(--black2white)] rounded-[10px] py-[10px] text-center cursor-pointer"
-                        >
-                            <p className="w-full text-[18px] text-[var(--white2black)] font-[heebo-regular] text-center">
-                                Log in with Google
-                            </p>
-                        </motion.div>
+                        <GoogleAthentification clearData={clearData} setSuccessfulAuthentication={setSuccessfulAuthentication} />
+                        
                         <p className="w-full text-center cursor-default">
                             or
                         </p>

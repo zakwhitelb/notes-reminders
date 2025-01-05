@@ -52,13 +52,17 @@ function CreateAccountForm({ setButtonClicked, data, handleChange, clearData, se
     }, [setErrorMessage, handleChange]);
 
     // Submit the form
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (!isValidUserName(data.name) || !isValidEmail(data.email) || !isValidPasswordColor(passwordStrengthColor)) {
             setErrorMessage("Name, email or password is not valid!");
             return;
         }
-
-        CreateAccount(data);
+        try {
+            await CreateAccount(data);
+        }
+        catch (error) {
+            setErrorMessage("An error occurred while creating the account.", error);
+        }
     };
 
     return (

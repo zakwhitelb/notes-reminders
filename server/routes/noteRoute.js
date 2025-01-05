@@ -9,6 +9,7 @@ router.get('/:userId/:status', noteController.getNotesByStatus);
 router.get('/:userId/:id', getNoteById, noteController.getNoteById); // Get a specific note
 router.post('/:userId', noteController.createNote); // Create a new note
 router.patch('/:userId/:id', getNoteById, noteController.updateNote); // Update a specific note
+router.patch('/:userId/:id/status', getNoteById, noteController.updateStatusNote);
 router.delete('/:userId/:id', getNoteById, noteController.deleteNote); // Delete a specific note
 
 module.exports = router;

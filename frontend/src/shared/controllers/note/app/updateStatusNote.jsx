@@ -1,7 +1,8 @@
+// System
 import axios from "axios";
-import { jwtDecode } from "jwt-decode"; 
+import { jwtDecode } from "jwt-decode";
 
-async function getOne(setErrorMessage) {
+async function updateStatusNote(setErrorMessage, id, status) {
     try {
         const token = JSON.parse(localStorage.getItem("token"));
         
@@ -13,14 +14,17 @@ async function getOne(setErrorMessage) {
         const userId = decodedToken.userId; // Ensure this is correct in your token payload
 
         // Make request to backend
-        const response = await axios.get(`http://localhost:4000/users/${userId}`);
+        const response = await axios.patch(`http://localhost:4000/notes/${userId}/${id}/status`,
+        {
+            status: status
+        });
 
         return response;
     } 
     catch (err) {
-        setErrorMessage(err.response?.data?.message || "An error occurred");
+        setErrorMessage(err.response?.message || "An error occurred");
         throw err;
     }
 }
 
-export { getOne };
+export { updateStatusNote };

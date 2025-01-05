@@ -13,7 +13,7 @@ async function updateUserPassword(setErrorMessage, data) {
 
         // Make the API request with Authorization header
         const response = await axios.patch(
-            `http://localhost:4000/users/${userId}`,
+            `http://localhost:4000/users/password/${userId}`,
             {
                 password: data.password,
                 newPassword: data.newPassword,
@@ -24,6 +24,8 @@ async function updateUserPassword(setErrorMessage, data) {
                 },
             }
         );
+
+        console.log(response)
 
         return response;
     } 
