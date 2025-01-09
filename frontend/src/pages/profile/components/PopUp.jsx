@@ -16,7 +16,7 @@ import { getPasswordStrengthColor, isValidPasswordColor } from "../../../shared/
 // Icons    
 import { RemovePopUp } from "../../../shared/assets/icons/RemovePopUp.icon";
 
-function PopUp({ handleClickChangePassword }) {
+function PopUp({ googleLogin, handleClickChangePassword }) {
     const { errorMessage, setErrorMessage, UpdatePassword } = UserController();
     const [newPasswordStrengthColor, setNewPasswordStrengthColor] = useState("bg-[var(--red)]");
     const [confPasswordStrengthColor, setConfPasswordStrengthColor] = useState("bg-[var(--red)]");
@@ -110,13 +110,15 @@ function PopUp({ handleClickChangePassword }) {
                     <h1 className="text-[34px] text-[var(--black2white)] text-center font-[merriweather-sans-bold] w-full">Profile</h1>
                 </div>
                 <div className="flex flex-col gap-[20px]">
-                    <Input
-                        type="password"
-                        name="password"
-                        placeholder="Current password"
-                        value={data.password || ""}
-                        handleChange={handleChange}
-                    />
+                    {!googleLogin &&
+                        <Input
+                            type="password"
+                            name="password"
+                            placeholder="Current password"
+                            value={data.password || ""}
+                            handleChange={handleChange}
+                        />
+                    }
                     <Input
                         type="password"
                         name="newPassword"
@@ -159,10 +161,12 @@ function PopUp({ handleClickChangePassword }) {
 }
 
 PopUp.propTypes = {
+    googleLogin: PropTypes.bool.isRequired,
     handleClickChangePassword: PropTypes.func.isRequired,
 };
 
 PopUp.defaultProps = {
+    googleLogin: false,
 };
 
 export { PopUp };

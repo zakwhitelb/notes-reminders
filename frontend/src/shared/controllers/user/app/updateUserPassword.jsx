@@ -1,5 +1,4 @@
 import axios from "axios";
-import { jwtDecode } from "jwt-decode"; 
 
 async function updateUserPassword(setErrorMessage, data) {
     try {
@@ -8,12 +7,9 @@ async function updateUserPassword(setErrorMessage, data) {
             throw new Error("Token is missing");
         }
 
-        const decodedToken = jwtDecode(token);
-        const userId = decodedToken.userId; // Ensure the token contains the correct userId
-
         // Make the API request with Authorization header
         const response = await axios.patch(
-            `http://localhost:4000/users/password/${userId}`,
+            `http://localhost:4000/users/password/${token}`,
             {
                 password: data.password,
                 newPassword: data.newPassword,

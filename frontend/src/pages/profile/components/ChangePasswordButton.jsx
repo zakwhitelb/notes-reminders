@@ -1,16 +1,16 @@
 // System
 import ReactDOM from "react-dom";
+import PropTypes from "prop-types";
 import { useState } from "react";
 import { motion } from "motion/react";
 
 // Components
 import { PopUp } from "./PopUp";
 
-function ChangePasswordButton() {
+function ChangePasswordButton({ googleLogin }) {
     const [isPopupVisible, setIsPopupVisible] = useState(false);
 
     const handleClickChangePassword = () => {
-        console.log("changePassword")
         setIsPopupVisible((prev) => !prev);
     };
 
@@ -22,11 +22,11 @@ function ChangePasswordButton() {
                 className="w-fit text-[16px] text-[var(--red)] font-[khula-regular] cursor-pointer"
                 onClick={() => {handleClickChangePassword()}}
             >
-                Change password
+                {googleLogin ? "Set password" : "Change password"}
             </motion.p>
             {isPopupVisible && 
                 ReactDOM.createPortal(
-                    <PopUp handleClickChangePassword={handleClickChangePassword} />,  // PopUp to render
+                    <PopUp googleLogin={googleLogin} handleClickChangePassword={handleClickChangePassword} />,  // PopUp to render
                     document.getElementById("profile")  // Specify the target element
                 )
             }
@@ -41,9 +41,12 @@ function ChangePasswordButton() {
                     document.getElementById("profile_container")  // Specify the target element
                 )
             }
-            
         </div>
     )
 }
+
+ChangePasswordButton.propTypes = {
+    googleLogin: PropTypes.bool.isRequired,
+};
 
 export { ChangePasswordButton };

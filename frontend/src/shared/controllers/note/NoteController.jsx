@@ -6,18 +6,19 @@ import { updateStatusNote } from "./app/updateStatusNote";
 import { deleteNote } from "./app/deleteNote";
 
 function NoteController() {
-    const [response, setResponse] = useState({ notes: [] }); // Initialize with empty notes array
+    const [response, setResponse] = useState(null); // Initialize with empty notes array
     const [errorMessage, setErrorMessage] = useState("");
 
     async function GetAllNotes() {
         try {
             // Call createUser and get the API response
             const apiResponse = await getNotes(setErrorMessage);
-
+            console.log(apiResponse)
             if (apiResponse) {
                 // Set response state with token and user data
                 const { data: { notes } } = apiResponse;
-                setResponse({ notes });
+
+                setResponse({ notes: notes });
             }
         }
         catch (error) {
@@ -34,7 +35,8 @@ function NoteController() {
             if (apiResponse) {
                 // Set response state with token and user data
                 const { data: { note } } = apiResponse;
-                setResponse({ note });
+                console.log(note)
+                setResponse(note);
             }
         } 
         catch (error) {
@@ -51,7 +53,8 @@ function NoteController() {
             if (apiResponse) {
                 // Set response state with token and user data
                 const { data: { note } } = apiResponse;
-                setResponse({ note });
+                
+                setResponse({ note: note });
             }
         }
         catch (error) {
@@ -68,7 +71,8 @@ function NoteController() {
             if (apiResponse) {
                 // Set response state with token and user data
                 const { data: { note } } = apiResponse;
-                setResponse({ note });
+
+                setResponse(note);
             }
         }
         catch (error) {

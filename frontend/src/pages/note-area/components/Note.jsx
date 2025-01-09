@@ -1,7 +1,7 @@
-// System
+// System 
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { motion } from "framer-motion"; // Corrected import from `motion/react` to `framer-motion`
 
 import { NoteController } from "../../../shared/controllers/note/NoteController";
@@ -23,6 +23,7 @@ const STATUS_COLORS = {
 function Note({ note, setResponseNotes }) {
     const { response, errorMessage, setErrorMessage, UpdateOneNote, UpdateStatusOneNote, DeleteOneNote } = NoteController();
     const [isPopupVisible, setIsPopupVisible] = useState(false);
+    const action = useRef();
     const [statusColor, setStatusColor] = useState({});
     const [isChangingStatus, setIsChangingStatus] = useState(false);
     const [shouldRender, setShouldRender] = useState(false); // State to trigger re-render
@@ -47,16 +48,13 @@ function Note({ note, setResponseNotes }) {
     }, []);
 
     const handleTogglePopUp = useCallback(() => {
-        setIsPopupVisible((prev) => {
-            if(prev) setResponseNotes({ notes: [] })
-            return !prev;
-        });
-    }, [setResponseNotes]);
+        setIsPopupVisible((prev) => !prev);
+    }, []);
 
     const handleDeleteNote = useCallback(async () => {
         try {
             await DeleteOneNote(data.id);
-            if (response) setResponseNotes({ notes: [] });
+            if (response) setResponseNotes((prev) => prev.filter((n) => n.id !== data.id));
         } 
         catch (err) {
             console.error("Error during submission:", err);
@@ -67,8 +65,12 @@ function Note({ note, setResponseNotes }) {
         if (!validateNoteData(setErrorMessage, data)) return;
 
         try {
-            await UpdateOneNote(data);
-            if (response) setResponseNotes({ notes: [] });
+            const updatedNote = await UpdateOneNote(data);
+            if (response) {
+                setResponseNotes((prev) =>
+                    prev.map((n) => (n.id === data.id ? updatedNote : n))
+                );
+            }
         } 
         catch (err) {
             console.error("Error during submission:", err);
@@ -77,44 +79,50 @@ function Note({ note, setResponseNotes }) {
 
     const handleChangeStatusNote = useCallback(async ({ overdue }) => {
         let newStatus;
-        if(overdue) {
-            newStatus = "overdue"
+
+        if (overdue) {
+            newStatus = "overdue";
+        } else if (overdueDate(data.day, data.hour, data.min)) {
+            newStatus = data.status === "completed" ? "overdue" : "completed";
+        } else {
+            newStatus = data.status === "incomplete" || data.status === "overdue" ? "completed" : "incomplete";
         }
-        else {
-            if(overdueDate(data.day, data.hour, data.min)) {
-                newStatus = data.status === "completed" ? "overdue" : "completed";
-            }
-            else {
-                newStatus = data.status === "incomplete" || data.status === "overdue" ? "completed" : "incomplete";
-            }
-        }
-        
+
         setData((prevData) => ({ ...prevData, status: newStatus }));
 
         try {
             await UpdateStatusOneNote(data.id, newStatus);
-            setIsChangingStatus({
-                status: newStatus
-            });
+            
+            setIsChangingStatus({ status: newStatus });
             setTimeout(() => {
+                action.current = {type: "handleChangeStatusNote", newStatus: newStatus};
                 setIsChangingStatus(false);
-                if (response) setResponseNotes({ notes: [] });
             }, 1000); // Reset after 0.8 seconds
         } catch (err) {
             console.error("Error during submission:", err);
         }
-    }, [data, UpdateStatusOneNote, response, setResponseNotes]);
+    }, [data, UpdateStatusOneNote]);
+
+    useEffect(() => {
+        if (action.current.type === "handleEditNote" && response) setResponseNotes(null);
+        if (action.current.type === "handleChangeStatusNote" && response) {
+            setResponseNotes((prev) =>
+                prev.map((n) => (n.id === data.id ? { ...n, status: action.current.newStatus } : n))
+            );
+        }
+        if (action.current.type === "handleDeleteNote" && response) setResponseNotes(null);
+    }, [data, action, response, setResponseNotes]);
 
     // Re-render note when the current date matches the note date
     useEffect(() => {
         const interval = setInterval(() => {
             if (isNowDate(data.day, data.hour, data.min) && data.status === "incomplete" && !shouldRender) {
                 setShouldRender((prev) => !prev);
-                handleChangeStatusNote({overdue: true})
+                handleChangeStatusNote({ overdue: true });
             }
-            if(overdueDate(data.day, data.hour, data.min) && data.status === "incomplete" && !shouldRender) {
+            if (overdueDate(data.day, data.hour, data.min) && data.status === "incomplete" && !shouldRender) {
                 setShouldRender((prev) => !prev);
-                handleChangeStatusNote({overdue: true})
+                handleChangeStatusNote({ overdue: true });
             }
         }, 1000); // Check every second
 
@@ -220,8 +228,8 @@ Note.propTypes = {
         description: PropTypes.string.isRequired,
         status: PropTypes.oneOf(["incomplete", "completed", "overdue"]).isRequired,
         day: PropTypes.string.isRequired,
-        hour: PropTypes.string.isRequired,
-        min: PropTypes.string.isRequired,
+        hour: PropTypes.oneOfType(PropTypes.number.isRequired, PropTypes.string.isRequired),
+        min: PropTypes.oneOfType(PropTypes.number.isRequired, PropTypes.string.isRequired),
     }).isRequired,
     setResponseNotes: PropTypes.func.isRequired,
 };

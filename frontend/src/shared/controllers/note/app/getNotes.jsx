@@ -1,26 +1,20 @@
 import axios from "axios";
-import { jwtDecode } from "jwt-decode"; 
+import { getToken } from "../../helpers/token";
 
-async function getNotes(setErrorMessage) {
+export async function getNotes(setErrorMessage) {
     try {
-        const token = JSON.parse(localStorage.getItem("token"));
-        
-        if (!token) {
-            throw new Error("Token is missing");
-        }
+        const token = getToken();
+        const response = await axios.get(`http://localhost:4000/notes`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
 
-        const decodedToken = jwtDecode(token);
-        const userId = decodedToken.userId; // Ensure this is correct in your token payload
+        console.log(response)
 
-        // Make request to backend
-        const response = await axios.get(`http://localhost:4000/notes/${userId}`);
-        
         return response;
     } 
     catch (err) {
-        setErrorMessage(err.response?.data?.message || "An error occurred");
+        const errorMessage = err.response?.data?.message || "An unexpected error occurred.";
+        setErrorMessage(errorMessage);
         throw err;
     }
 }
-
-export { getNotes };

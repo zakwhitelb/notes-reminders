@@ -1,5 +1,4 @@
 import axios from "axios";
-import { jwtDecode } from "jwt-decode"; // Fix named import
 
 async function deleteUser(setErrorMessage, data) {
     try {
@@ -8,16 +7,9 @@ async function deleteUser(setErrorMessage, data) {
         if (!token) {
             throw new Error("Token is missing");
         }
-
-        const decodedToken = jwtDecode(token);
-        const userId = decodedToken.userId;
-
         // Send `email` and `password` as query parameters
         const response = await axios.delete(
-            `http://localhost:4000/users/${userId}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`, // Include the token
-                },
+            `http://localhost:4000/users/${token}`, {
                 params: { // Pass email and password as query params
                     email: data.email,
                     password: data.password,

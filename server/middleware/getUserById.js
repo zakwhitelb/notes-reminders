@@ -1,12 +1,13 @@
 const USER = require('../models/userModel');
 
-// Middleware to fetch a user by ID
+// Middleware to fetch a user by userId (retrieved from the token)
 async function getUserById(req, res, next) {
     try {
-        const user = await USER.findById(req.params.id); // Fetch user by ID from the database
+        // Fetch the user from the database using the userId decoded from the token
+        const user = await USER.findById(req.userId);
 
         if (!user) {
-            return res.status(404).json({ message: "Cannot find user" });
+            return res.status(404).json({ message: "User not found" });
         }
 
         res.user = user; // Attach the user object to the response for downstream usage

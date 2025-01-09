@@ -1,5 +1,5 @@
 // System
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 
 // Controllers
@@ -15,7 +15,6 @@ function NoteArea() {
     const menuClickedButton = useSelector((state) => state.menu_clicked_button.value);
 
     const { response, setResponse, GetAllNotes } = NoteController();
-    const [notes, setNotes] = useState([]);
 
     useEffect(() => {
         const fetchNotes = async () => {
@@ -29,32 +28,30 @@ function NoteArea() {
             }
         };
         fetchNotes();
-    }, [response, GetAllNotes, setResponse]);
+    }, [GetAllNotes, response?.notes?.length, setResponse]);
 
+    // Filter notes based on the selected menu option
     const filteredNotes = useMemo(() => {
         if (!response?.notes) return [];
-        switch (menuClickedButton) {
-            case "incomplete":
-                return response.notes.filter((note) => note.status === "incomplete");
-            case "completed":
-                return response.notes.filter((note) => note.status === "completed");
-            case "overdue":
-                return response.notes.filter((note) => note.status === "overdue");
-            default:
-                return response.notes;
-        }
+        return response.notes.filter((note) => {
+            if (menuClickedButton === "incomplete") return note.status === "incomplete";
+            if (menuClickedButton === "completed") return note.status === "completed";
+            if (menuClickedButton === "overdue") return note.status === "overdue";
+            return true; // Default case: show all notes
+        });
     }, [response?.notes, menuClickedButton]);
 
-    useEffect(() => {
-        setNotes(filteredNotes);
-    }, [filteredNotes, notes]);
-
-    const noteCounts = useMemo(() => ({
-        all: response?.notes?.length || 0,
-        incomplete: response?.notes?.filter((note) => note.status === "incomplete").length || 0,
-        completed: response?.notes?.filter((note) => note.status === "completed").length || 0,
-        overdue: response?.notes?.filter((note) => note.status === "overdue").length || 0,
-    }), [response?.notes]);
+    // Compute note counts for different statuses
+    const noteCounts = useMemo(() => {
+        const allNotes = response?.notes || [];
+        const counts = {
+            all: allNotes.length,
+            incomplete: allNotes.filter((note) => note.status === "incomplete").length,
+            completed: allNotes.filter((note) => note.status === "completed").length,
+            overdue: allNotes.filter((note) => note.status === "overdue").length,
+        };
+        return counts;
+    }, [response?.notes]);
 
     if (!isLoggedIn) {
         return <Error404 />;
@@ -71,7 +68,7 @@ function NoteArea() {
                 completedNbr={noteCounts.completed}
                 overdueNbr={noteCounts.overdue}
             />
-            <NotesView notes={notes} setResponseNotes={setResponse} />
+            <NotesView notes={filteredNotes} setResponseNotes={setResponse} />
         </div>
     );
 }

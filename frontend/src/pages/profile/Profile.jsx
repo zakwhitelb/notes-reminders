@@ -27,27 +27,26 @@ import { Warning as WarningIcon } from "../../shared/assets/icons/Warning.icon";
 import { Picture } from "../../shared/components/ui/Picture";
 
 function Profile() {
+    const { response, setResponse, errorMessage, setErrorMessage, Profile, UpdateAccount, DeleteAccount } = UserController();
     const isLoggedIn = useSelector((state) => state.authentification_status.value);
-    console.log(isLoggedIn);
-    const {
-        response,
-        setResponse,
-        errorMessage,
-        setErrorMessage,
-        Profile,
-        UpdateAccount,
-        DeleteAccount
-    } = UserController();
-
+    const [data, setData] = useState({ name: "", email: "", password: "" });
     const [showSuccessfulWork, setSuccessfulWork] = useState(false);
     const dispatch = useDispatch();
-    const [data, setData] = useState({ name: "", email: "", password: "" });
 
     // Fetch profile data on mount if not already present
     useEffect(() => {
-        if (!response) {
-            Profile().catch((err) => console.error("Profile fetch error:", err));
+        const handleGetResponse = async () => {
+            if (!response) {
+                try {
+                    await Profile()
+                }
+                catch (err) {
+                    console.error("Error while fetching notes:", err);
+                }
+            }
         }
+
+        handleGetResponse();
     }, [Profile, response]);
 
     // Update local state when response changes
@@ -172,7 +171,7 @@ function Profile() {
                             value={data.password}
                             handleChange={handleChange}
                         />
-                        <ChangePasswordButton />
+                        <ChangePasswordButton googleLogin={response ? response.googleLogin : false} />
                     </div>
                     <div className="w-full mt-[-5px]">
                         {errorMessage && (

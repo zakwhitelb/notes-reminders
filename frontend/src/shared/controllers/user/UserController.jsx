@@ -72,9 +72,9 @@ function UserController() {
         try {
             const apiResponse = await getOne(setErrorMessage);
             if (apiResponse?.data) {
-                const { name, email } = apiResponse.data;
-
-                setResponse({ name, email });
+                const { name, email, googleLogin } = apiResponse.data;
+                
+                setResponse({ name, email, googleLogin });
             }
         } 
         catch (error) {
