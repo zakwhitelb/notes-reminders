@@ -1,7 +1,7 @@
 // System
 import PropTypes from "prop-types";
 
-function Notification({ width, height, color }) {
+function Notification({ width=20, height=20, color="var(--black2white)" }) {
     return (
         <div>
             <svg width={width} height={height} viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -16,13 +16,6 @@ Notification.propTypes = {
     width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     color: PropTypes.string,
-};
-
-// Set default props
-Notification.defaultProps = {
-    width: "20",
-    height: "20",
-    color: "var(--black2white)",
 };
 
 export { Notification };

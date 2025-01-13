@@ -14,7 +14,6 @@ async function getUserById(req, res, next) {
         next(); // Move to the next middleware/controller
     } 
     catch (err) {
-        console.error("Error in getUserById middleware:", err);
         return res.status(500).json({ message: "Server error while fetching user" });
     }
 }

@@ -1,7 +1,7 @@
 // System
 import PropTypes from "prop-types";
 
-function Loding({ width, height, color }) {
+function Loding({ width=120, height=120, color="var(--black2white)" }) {
     return (
         <div>
             <svg width={width} height={height} viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
@@ -16,13 +16,6 @@ Loding.propTypes = {
     width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     color: PropTypes.string,
-};
-
-// Set default props
-Loding.defaultProps = {
-    width: "120",
-    height: "120",
-    color: "var(--black2white)",
 };
 
 export { Loding };

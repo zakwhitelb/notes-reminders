@@ -1,7 +1,7 @@
 // System
 import PropTypes from "prop-types"
 
-function Successful({ width, height, color }) {
+function Successful({ width=20, height=20, color="var(--black2white)" }) {
     return (
         <div className="w-fit h-fit">
             <svg width={width} height={height} viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -16,13 +16,6 @@ Successful.propTypes = {
     width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     color: PropTypes.string,
-};
-
-// Set default props
-Successful.defaultProps = {
-    width: "20",
-    height: "20",
-    color: "var(--black2white)",
 };
 
 export { Successful };

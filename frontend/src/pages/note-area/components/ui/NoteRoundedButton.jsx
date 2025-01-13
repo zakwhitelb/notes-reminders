@@ -8,7 +8,7 @@ import { EditNote } from "../../../../shared/assets/icons/EditNote.icon";
 import { Done as DoneIcon } from "../../../../shared/assets/icons/Done.icon";
 import { NoteDone } from "../../../../shared/assets/icons/NoteDone.icon";
 
-function NoteRoundedButton({ type, bgColor, iconColor, onClick }) {
+function NoteRoundedButton({ type="delete", bgColor="var(--red)", iconColor="var(--white)", onClick=() => console.log("Button clicked") }) {
     return (
         <motion.div
             whileHover={{ scale: 1.07 }}
@@ -28,17 +28,9 @@ function NoteRoundedButton({ type, bgColor, iconColor, onClick }) {
 // Prop types validation
 NoteRoundedButton.propTypes = {
     type: PropTypes.oneOf(["delete", "edit", "incomplete", "completed", "overdue"]),
-    bgColor: PropTypes.string.isRequired,
-    iconColor: PropTypes.string.isRequired,
+    bgColor: PropTypes.string,
+    iconColor: PropTypes.string,
     onClick: PropTypes.func.isRequired,
-};
-
-// Default properties
-NoteRoundedButton.defaultProps = {
-    type: "delete",
-    bgColor: "var(--red)",
-    iconColor: "var(--white)",
-    onClick: () => console.log("Button clicked"),
 };
 
 export { NoteRoundedButton };

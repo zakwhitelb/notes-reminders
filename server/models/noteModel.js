@@ -41,6 +41,11 @@ const noteSchema = new mongoose.Schema({
         enum: ["incomplete", "completed", "overdue"], // Enum for valid status values
         default: "incomplete" // Default value
     },
+    createTime: {
+        type: Date,
+        required: true,
+        default: Date.now // Automatically set the creation time
+    },
     userId: {
         type: String, // Changed to `String` to match MongoDB ObjectId type for users
         required: true

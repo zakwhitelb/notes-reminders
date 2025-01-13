@@ -15,7 +15,7 @@ import { getPasswordStrengthColor, isValidPasswordColor, isValidEmail } from "..
 
 // Redux
 import { useDispatch } from 'react-redux';
-import { Login } from '../../../redux/slices/AuthentificationSlice'; 
+import { Login } from '../../../shared/redux/slices/AuthentificationSlice'; 
 
 function LoginForm({ setButtonClicked, data, handleChange, clearData, setSuccessfulAuthentication }) {
     const { response, errorMessage, setErrorMessage, LoginAccount } = UserController();

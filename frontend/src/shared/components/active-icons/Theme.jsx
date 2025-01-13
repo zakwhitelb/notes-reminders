@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { motion } from "motion/react"
 
 // Redux Actions
-import { ToggleTheme } from '../../../redux/slices/ThemeSlice';
+import { ToggleTheme } from '../../../shared/redux/slices/ThemeSlice';
 
 // Icons
 import { Theme as ThemeIcon } from "../../assets/icons/Theme.icon";

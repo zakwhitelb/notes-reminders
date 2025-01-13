@@ -1,15 +1,39 @@
+// System
 import { useState } from "react";
+
+// Functions
+import { validateToken } from "./app/validateToken";
 import { createUser } from "./app/createUser";
 import { loginUser } from "./app/loginUser";
 import { googleLoginUser } from "./app/googleLoginUser"
 import { getOne } from "./app/getOne";
 import { updateUser } from "./app/updateUser";
+import { setUserPassword } from "./app/setUserPassword";
 import { updateUserPassword } from "./app/updateUserPassword";
 import { deleteUser } from "./app/deleteUser";
 
 function UserController() {
     const [response, setResponse] = useState(null);
     const [errorMessage, setErrorMessage] = useState("");
+
+    async function ValidateUserToken() {
+        try {
+            // Call createUser and get the API response
+            const apiResponse = await validateToken(setErrorMessage);
+
+            if (apiResponse) {
+                // Set response state with token and user data
+                const { data: { message } } = apiResponse;
+                
+                setResponse({ message });
+            }
+        } 
+        catch (error) {
+            setErrorMessage( error.response?.data?.message || "An error occurred ValidateUserToken");
+            console.log(error.response?.data?.message || "An error occurred ValidateUserToken")
+            throw error;
+        }
+    }
 
     async function CreateAccount(data) {
         try {
@@ -25,7 +49,7 @@ function UserController() {
             }
         } 
         catch (error) {
-            setErrorMessage( error.response?.data?.message || "An error occurred");
+            setErrorMessage( error.response?.data?.message || "An error occurred CreateAccount");
             throw error;
         }
     }
@@ -44,7 +68,7 @@ function UserController() {
             }
         } 
         catch (error) {
-            setErrorMessage( error.response?.data?.message || "An error occurred");
+            setErrorMessage( error.response?.data?.message || "An error occurred LoginAccount");
             throw error; 
         }
     }
@@ -63,7 +87,7 @@ function UserController() {
             }
         } 
         catch (error) {
-            setErrorMessage( error.response?.data?.message || "An error occurred");
+            setErrorMessage( error.response?.data?.message || "An error occurred GoogleLoginAccount");
             throw error; 
         }
     }
@@ -78,7 +102,7 @@ function UserController() {
             }
         } 
         catch (error) {
-            setErrorMessage( error.response?.data?.message || "An error occurred");
+            setErrorMessage( error.response?.data?.message || "An error occurred Profile");
             throw error; 
         }
     }   
@@ -94,14 +118,14 @@ function UserController() {
             }
         } 
         catch (error) {
-            setErrorMessage(error.response?.data?.message || "An error occurred");
+            setErrorMessage(error.response?.data?.message || "An error occurred UpdateAccount");
             throw error;
         }
     }
 
-    async function UpdatePassword(data) {
+    async function SetPassword(data) {
         try {
-            const apiResponse = await updateUserPassword(setErrorMessage, data); // Call updateUserPassword
+            const apiResponse = await setUserPassword(setErrorMessage, data); // Call updateUserPassword
             console.log(apiResponse); // Debugging line
             if (apiResponse) {
                 const { data: { message } } = apiResponse;
@@ -110,7 +134,22 @@ function UserController() {
             }
         } 
         catch (error) {
-            setErrorMessage(error.response?.data?.message || "An error occurred");
+            setErrorMessage(error.response?.data?.message || "An error occurred SetPassword");
+            throw error; // Throw error to propagate to the calling code
+        }
+    }  
+
+    async function UpdatePassword(data) {
+        try {
+            const apiResponse = await updateUserPassword(setErrorMessage, data); // Call updateUserPassword
+            if (apiResponse) {
+                const { data: { message } } = apiResponse;
+
+                setResponse({ message });
+            }
+        } 
+        catch (error) {
+            setErrorMessage(error.response?.data?.message || "An error occurred UpdatePassword");
             throw error; // Throw error to propagate to the calling code
         }
     }    
@@ -126,7 +165,7 @@ function UserController() {
             }
         } 
         catch (error) {
-            setErrorMessage(error.response?.data.message || "An error occurred");
+            setErrorMessage(error.response?.data.message || "An error occurred DeleteAccount");
             throw error;
         }
     }    
@@ -136,11 +175,13 @@ function UserController() {
         setResponse,
         errorMessage,
         setErrorMessage,
+        ValidateUserToken,
         CreateAccount,
         LoginAccount,
         GoogleLoginAccount,
         Profile,
         UpdateAccount,
+        SetPassword,
         UpdatePassword,
         DeleteAccount,
     };

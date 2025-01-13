@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 // Redux 
-import { Login } from '../../../redux/slices/AuthentificationSlice';
+import { Login } from '../../../shared/redux/slices/AuthentificationSlice';
 
 // Controllers
 import { UserController } from '../../../shared/controllers/user/UserController';

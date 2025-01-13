@@ -1,7 +1,7 @@
 // System
 import PropTypes from "prop-types";
 
-function EditNote({ width, height, color }) {
+function EditNote({ width=12, height=12, color="var(--white)" }) {
     return (
         <div>
             <svg width={width} height={height} viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -12,15 +12,9 @@ function EditNote({ width, height, color }) {
 }
 
 EditNote.propTypes = {
-    width: PropTypes.oneOfType(PropTypes.number, PropTypes.string),
-    height: PropTypes.oneOfType(PropTypes.number, PropTypes.string),
+    width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     color: PropTypes.string,
-}
-
-EditNote.defaultProps = {
-    width: "12px",
-    height: "12px",
-    color: "var(--white)",
 }
 
 export { EditNote };

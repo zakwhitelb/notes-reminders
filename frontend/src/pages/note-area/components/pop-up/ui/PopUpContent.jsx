@@ -5,7 +5,7 @@ import { motion } from "motion/react";
 // Icons
 import { DeleteNote as DeleteNoteIcon } from "../../../../../shared/assets/icons/DeleteNote.icon";
 
-function PopUpContent({ data, type, handleDeleteNote, handleSubmit, handleChange, errorMessage }) {
+function PopUpContent({ data={}, type="add_note", handleDeleteNote, handleSubmit, handleChange, errorMessage }) {
     const { title, description, day, hour, min } = data;
     // Helper to format DD-MM-YYYY to YYYY-MM-DD
     const formatDateToISO = (date) => {
@@ -21,7 +21,6 @@ function PopUpContent({ data, type, handleDeleteNote, handleSubmit, handleChange
     const handleDateChange = (event) => {
         const { name, value } = event.target;
         if (name === "day") {
-            console.log(value)
             const formattedDate = formatISOToDate(value); // Convert YYYY-MM-DD to DD-MM-YYYY
             handleChange({ target: { name, value: formattedDate } });
         }
@@ -134,8 +133,3 @@ PopUpContent.propTypes = {
 };
 
 export { PopUpContent };
-
-PopUpContent.defaultProps = {
-    data: {},
-    type: "add_note",
-};

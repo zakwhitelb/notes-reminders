@@ -3,10 +3,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { motion } from "framer-motion";
 
 // Redux
-import { SearchNoteName, ClearSearch } from "../../../redux/slices/SearchNoteSlice";
+import { SearchNoteName, ClearSearch } from "../../../shared/redux/slices/SearchNoteSlice";
 
 // Icons
 import { SearchNote as SearchNoteIcon } from "../../../shared/assets/icons/SearchNote.icon";
+
+// CComponents
+import { RemoveSearchContent } from "../../../shared/components/active-icons/RemoveSearchContent";
 
 function SearchNote() {
     const dispatch = useDispatch();
@@ -27,7 +30,7 @@ function SearchNote() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: "linear" }}
-            className="flex items-center justify-center w-full bg-[var(--skyWhite2skyBlack)] rounded-[8px] pl-[14px] cursor-pointer"
+            className="flex items-center justify-center w-full bg-[var(--skyWhite2skyBlack)] rounded-[8px] px-[14px] cursor-pointer"
         >
             <SearchNoteIcon />
             <motion.input
@@ -41,6 +44,7 @@ function SearchNote() {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.3 }}
             />
+            <RemoveSearchContent />
         </motion.div>
     );
 }

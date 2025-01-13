@@ -1,7 +1,7 @@
 // System
 import PropTypes from "prop-types"
 
-function SearchNote({ width, height, color}) {
+function SearchNote({ width=24, height=24, color="var(--placeholder)" }) {
     return (
         <div>
             <svg width={width} height={height} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -16,13 +16,6 @@ SearchNote.propTypes = {
     width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     color: PropTypes.string,
-};
-
-// Set default props
-SearchNote.defaultProps = {
-    width: "24",
-    height: "24",
-    color: "var(--placeholder)",
 };
 
 export { SearchNote };

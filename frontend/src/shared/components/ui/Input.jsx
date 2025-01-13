@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-function Input({ type, name, placeholder, value, handleChange, colorPassword, create_account }) {
+function Input({ type="text", name="", placeholder="", value="", handleChange, colorPassword="bg-[var(--red)]", create_account=false }) {
     return (
         <div className="flex flex-col gap-[10px]">
             <label 
@@ -44,17 +44,7 @@ Input.propTypes = {
     value: PropTypes.string,
     handleChange: PropTypes.func.isRequired,
     colorPassword: PropTypes.string,
-    create_account: PropTypes.bool.isRequired,
-};
-
-// Set default props
-Input.defaultProps = {
-    type: "text",
-    name: "",
-    placeholder: "",
-    value: "",
-    colorPassword: "bg-[var(--red)]",
-    create_account: false,
+    create_account: PropTypes.bool,
 };
 
 export { Input };

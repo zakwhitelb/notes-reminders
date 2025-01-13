@@ -10,7 +10,7 @@ import { Notification } from "../../../../shared/assets/icons/Notification.icon"
 import { Successful } from "../../../../shared/assets/icons/Successful.icon";
 import { ErrorNotification } from "../../../../shared/assets/icons/ErrorNotification.icon";
 
-function PopUp({ handleToggelPopUp, data, type, handleChange, handleDeleteNote, handleSubmit, errorMessage }) {
+function PopUp({ handleToggelPopUp, data={}, type='add_note', handleChange, handleDeleteNote, handleSubmit, errorMessage }) {
     const { status } = data;
     return (
         <AnimatePresence>
@@ -68,17 +68,12 @@ function PopUp({ handleToggelPopUp, data, type, handleChange, handleDeleteNote, 
 
 PopUp.propTypes = {
     handleToggelPopUp: PropTypes.func.isRequired,
-    data: PropTypes.object.isRequired,
-    type: PropTypes.string.isRequired,
+    data: PropTypes.object,
+    type: PropTypes.string,
     handleChange: PropTypes.func,
     handleDeleteNote: PropTypes.func,
     handleSubmit: PropTypes.func.isRequired,
     errorMessage: PropTypes.string,
-};
-
-PopUp.defaultProps = {
-    data: {},
-    type: 'add_note',
 };
 
 export { PopUp };

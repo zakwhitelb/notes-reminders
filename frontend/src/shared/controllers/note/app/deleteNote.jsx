@@ -7,8 +7,10 @@ export async function deleteNote(setErrorMessage, noteId) {
         const response = await axios.delete(`http://localhost:4000/notes/${noteId}`, {
             headers: { Authorization: `Bearer ${token}` },
         });
-        return response.data;
-    } catch (err) {
+
+        return response;
+    } 
+    catch (err) {
         const errorMessage = err.response?.data?.message || "An unexpected error occurred.";
         setErrorMessage(errorMessage);
         throw err;

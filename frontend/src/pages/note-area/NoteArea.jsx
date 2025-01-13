@@ -67,6 +67,7 @@ function NoteArea() {
                 incompleteNbr={noteCounts.incomplete}
                 completedNbr={noteCounts.completed}
                 overdueNbr={noteCounts.overdue}
+                setResponse={setResponse}
             />
             <NotesView notes={filteredNotes} setResponseNotes={setResponse} />
         </div>

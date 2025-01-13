@@ -7,7 +7,7 @@ import { motion } from "motion/react";
 // Components
 import { PopUp } from "./PopUp";
 
-function ChangePasswordButton({ googleLogin }) {
+function ChangePasswordButton({ googleLogin=false }) {
     const [isPopupVisible, setIsPopupVisible] = useState(false);
 
     const handleClickChangePassword = () => {
@@ -46,7 +46,7 @@ function ChangePasswordButton({ googleLogin }) {
 }
 
 ChangePasswordButton.propTypes = {
-    googleLogin: PropTypes.bool.isRequired,
+    googleLogin: PropTypes.bool,
 };
 
 export { ChangePasswordButton };

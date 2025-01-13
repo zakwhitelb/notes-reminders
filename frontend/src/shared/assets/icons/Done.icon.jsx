@@ -1,6 +1,6 @@
 import PropTypes from "prop-types"
 
-function Done({ width, height, color }) {
+function Done({ width=14, height=14, color="var(--white)" }) {
     return (
         <div>
             <svg width={width} height={height} viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -15,13 +15,6 @@ Done.propTypes = {
     width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     color: PropTypes.string,
-};
-
-// Set default props
-Done.defaultProps = {
-    width: "14",
-    height: "14",
-    color: "var(--white)",
 };
 
 export { Done };

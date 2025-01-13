@@ -1,7 +1,7 @@
 // System
 import PropTypes from "prop-types"
 
-function AddNote({ width, height, color }) {
+function AddNote({ width=50, height=50, color="var(--black2white)" }) {
     return (
         <div>
             <svg width={width} height={height} viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
@@ -16,13 +16,6 @@ AddNote.propTypes = {
     width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     color: PropTypes.string,
-};
-
-// Set default props
-AddNote.defaultProps = {
-    width: "50",
-    height: "50",
-    color: "var(--black2white)",
 };
 
 export { AddNote };

@@ -7,13 +7,13 @@ import { useSelector } from "react-redux";
 import { AddNoteButton } from "./AddNoteButton";
 import { Note } from "./Note";
 
-function NotesView({ notes, setResponseNotes }) {
+function NotesView({ notes=[], setResponseNotes }) {
     // Get the search query from Redux store
     const searchQuery = useSelector((state) => state.search_note.value);
     // Filter notes based on the search query
     const filteredNotes = notes.filter((note) =>
         note.title.toLowerCase().startsWith(searchQuery.toLowerCase())
-    );    
+    );
 
     return (
         <motion.div
@@ -36,11 +36,6 @@ function NotesView({ notes, setResponseNotes }) {
 NotesView.propTypes = {
     notes: PropTypes.array,
     setResponseNotes: PropTypes.func.isRequired,
-};
-
-// Set default props
-NotesView.defaultProps = {
-    notes: [],
 };
 
 export { NotesView };

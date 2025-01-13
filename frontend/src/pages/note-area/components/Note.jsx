@@ -20,10 +20,10 @@ const STATUS_COLORS = {
     overdue: { noteColor: "var(--skyRed)", status: "var(--red)", bgColor: "var(--white)", iconColor: "var(--blue)", textColor: "var(--white)" },
 };
 
-function Note({ note, setResponseNotes }) {
+function Note({ note={ title: "", description: "", status: "incomplete", day: "", hour: "00", min: "00" }, setResponseNotes }) {
     const { response, errorMessage, setErrorMessage, UpdateOneNote, UpdateStatusOneNote, DeleteOneNote } = NoteController();
     const [isPopupVisible, setIsPopupVisible] = useState(false);
-    const action = useRef();
+    const action = useRef({type: ""});
     const [statusColor, setStatusColor] = useState({});
     const [isChangingStatus, setIsChangingStatus] = useState(false);
     const [shouldRender, setShouldRender] = useState(false); // State to trigger re-render
@@ -54,37 +54,36 @@ function Note({ note, setResponseNotes }) {
     const handleDeleteNote = useCallback(async () => {
         try {
             await DeleteOneNote(data.id);
-            if (response) setResponseNotes((prev) => prev.filter((n) => n.id !== data.id));
-        } 
+            action.current = {type: "handleDeleteNote", noteId: data.id};
+        }
         catch (err) {
             console.error("Error during submission:", err);
         }
-    }, [DeleteOneNote, data.id, response, setResponseNotes]);
+    }, [DeleteOneNote, data.id]);
 
     const handleEditNote = useCallback(async () => {
         if (!validateNoteData(setErrorMessage, data)) return;
 
         try {
-            const updatedNote = await UpdateOneNote(data);
-            if (response) {
-                setResponseNotes((prev) =>
-                    prev.map((n) => (n.id === data.id ? updatedNote : n))
-                );
-            }
+            await UpdateOneNote(data);
+            
+            action.current = {type: "handleEditNote"};
         } 
         catch (err) {
             console.error("Error during submission:", err);
         }
-    }, [setErrorMessage, data, UpdateOneNote, response, setResponseNotes]);
+    }, [setErrorMessage, data, UpdateOneNote]);
 
     const handleChangeStatusNote = useCallback(async ({ overdue }) => {
         let newStatus;
 
         if (overdue) {
             newStatus = "overdue";
-        } else if (overdueDate(data.day, data.hour, data.min)) {
+        } 
+        else if (overdueDate(data.day, data.hour, data.min)) {
             newStatus = data.status === "completed" ? "overdue" : "completed";
-        } else {
+        } 
+        else {
             newStatus = data.status === "incomplete" || data.status === "overdue" ? "completed" : "incomplete";
         }
 
@@ -94,23 +93,27 @@ function Note({ note, setResponseNotes }) {
             await UpdateStatusOneNote(data.id, newStatus);
             
             setIsChangingStatus({ status: newStatus });
-            setTimeout(() => {
-                action.current = {type: "handleChangeStatusNote", newStatus: newStatus};
-                setIsChangingStatus(false);
-            }, 1000); // Reset after 0.8 seconds
-        } catch (err) {
+            action.current = {type: "handleChangeStatusNote", newStatus: newStatus};
+        } 
+        catch (err) {
             console.error("Error during submission:", err);
         }
     }, [data, UpdateStatusOneNote]);
 
     useEffect(() => {
-        if (action.current.type === "handleEditNote" && response) setResponseNotes(null);
-        if (action.current.type === "handleChangeStatusNote" && response) {
-            setResponseNotes((prev) =>
-                prev.map((n) => (n.id === data.id ? { ...n, status: action.current.newStatus } : n))
-            );
+        if (action.current.type === "handleEditNote" && response) {
+            setResponseNotes("");
         }
-        if (action.current.type === "handleDeleteNote" && response) setResponseNotes(null);
+        if (action.current.type === "handleChangeStatusNote" && response) {
+            setTimeout(() => {
+                setResponseNotes("");
+                setIsChangingStatus(false);
+            }, 1000);
+            
+        }
+        if (action.current.type === "handleDeleteNote" && response) {
+            setResponseNotes("");
+        }
     }, [data, action, response, setResponseNotes]);
 
     // Re-render note when the current date matches the note date
@@ -228,21 +231,10 @@ Note.propTypes = {
         description: PropTypes.string.isRequired,
         status: PropTypes.oneOf(["incomplete", "completed", "overdue"]).isRequired,
         day: PropTypes.string.isRequired,
-        hour: PropTypes.oneOfType(PropTypes.number.isRequired, PropTypes.string.isRequired),
-        min: PropTypes.oneOfType(PropTypes.number.isRequired, PropTypes.string.isRequired),
+        hour: PropTypes.oneOfType([PropTypes.number.isRequired, PropTypes.string.isRequired]),
+        min: PropTypes.oneOfType([PropTypes.number.isRequired, PropTypes.string.isRequired]),
     }).isRequired,
     setResponseNotes: PropTypes.func.isRequired,
-};
-
-Note.defaultProps = {
-    note: {
-        title: "",
-        description: "",
-        status: "incomplete",
-        day: "",
-        hour: "00",
-        min: "00",
-    },
 };
 
 export { Note };

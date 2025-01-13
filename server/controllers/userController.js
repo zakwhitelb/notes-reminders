@@ -4,6 +4,31 @@ const USER = require("../models/userModel");
 
 const JWT_SECRET = process.env.JWT_SECRET || "secret-key";
 
+// Middleware to validate token
+// controllers/userController.js
+exports.validateToken = async (req, res) => {
+    try {
+        // The middleware already sets req.userId if the token is valid
+        const user = await USER.findById(req.userId);
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        res.status(200).json({
+            message: "Token is valid",
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+            },
+        });
+    } 
+    catch (err) {
+        res.status(500).json({ message: "An internal server error occurred." });
+    }
+};
+
 // Getting all users
 exports.getUsers = async (req, res) => {
     try {
@@ -29,7 +54,7 @@ exports.getUser = async (req, res) => {
             googleLogin = true;
         }
         const { email, name } = user;
-        console.log({ email, name, googleLogin });
+
         res.status(200).json({ email, name, googleLogin });
     } 
     catch (err) {
@@ -55,7 +80,7 @@ exports.createUser = async (req, res) => {
         });
 
         const user = await newUser.save();
-        const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: "1h" });
+        const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: "30d" });
 
         res.status(201).json({ token });
     } 
@@ -109,12 +134,12 @@ exports.googleLoginUser = async (req, res) => {
             });
 
             const user = await newUser.save();
-            const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: "1h" });
+            const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: "30d" });
 
             res.status(201).json({ token });
         }
 
-        const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: "1h" });
+        const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: "30d" });
         res.status(200).json({ token });
     } 
     catch (err) {
@@ -155,6 +180,24 @@ exports.updateUser = async (req, res) => {
     }
 };
 
+exports.setUserPassword = async (req, res) => {
+    try {
+        const user = res.user; // Retrieved from the `getUserById` middleware
+
+        // Hash the new password
+        const hashedPassword = await bcrypt.hash(req.body.newPassword, 10);
+
+        // Update user's password
+        user.password = hashedPassword;
+        await user.save();
+
+        res.status(200).json({ message: "Password set successfully" });
+    } 
+    catch (err) {
+        res.status(500).json({ message: "An error occurred while updating the password" });
+    }
+};
+
 exports.updateUserPassword = async (req, res) => {
     try {
         const user = res.user; // Retrieved from the `getUserById` middleware
@@ -174,8 +217,8 @@ exports.updateUserPassword = async (req, res) => {
         await user.save();
 
         res.status(200).json({ message: "Password updated successfully" });
-    } catch (err) {
-        console.error("Error updating password:", err);
+    } 
+    catch (err) {
         res.status(500).json({ message: "An error occurred while updating the password" });
     }
 };

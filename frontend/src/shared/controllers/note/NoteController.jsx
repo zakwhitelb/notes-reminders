@@ -1,4 +1,8 @@
+// System
 import { useState } from "react";
+import { useSelector } from "react-redux";
+
+// Functions
 import { getNotes } from "./app/getNotes";
 import { addNote } from "./app/addNote";
 import { updateNote } from "./app/updateNote";
@@ -8,12 +12,12 @@ import { deleteNote } from "./app/deleteNote";
 function NoteController() {
     const [response, setResponse] = useState(null); // Initialize with empty notes array
     const [errorMessage, setErrorMessage] = useState("");
+    const show_by = useSelector((state) => state.show_by.value);
 
     async function GetAllNotes() {
         try {
             // Call createUser and get the API response
-            const apiResponse = await getNotes(setErrorMessage);
-            console.log(apiResponse)
+            const apiResponse = await getNotes(setErrorMessage, show_by);
             if (apiResponse) {
                 // Set response state with token and user data
                 const { data: { notes } } = apiResponse;
@@ -89,6 +93,7 @@ function NoteController() {
             if (apiResponse) {
                 // Set response state with token and user data
                 const { data: { message } } = apiResponse;
+
                 setResponse({ message });
             }
         }

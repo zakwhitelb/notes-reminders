@@ -15,7 +15,7 @@ import { Input } from "../../../shared/components/ui/Input";
 
 // Redux
 import { useDispatch } from 'react-redux';
-import { Login } from '../../../redux/slices/AuthentificationSlice'; 
+import { Login } from '../../../shared/redux/slices/AuthentificationSlice'; 
 
 function CreateAccountForm({ setButtonClicked, data, handleChange, clearData, setSuccessfulAuthentication }) {
     const { response, errorMessage, setErrorMessage, CreateAccount } = UserController();

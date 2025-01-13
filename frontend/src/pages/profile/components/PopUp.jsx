@@ -1,6 +1,6 @@
 // System
 import PropTypes from "prop-types";
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { motion } from "motion/react";
 
 // Controllers
@@ -16,11 +16,12 @@ import { getPasswordStrengthColor, isValidPasswordColor } from "../../../shared/
 // Icons    
 import { RemovePopUp } from "../../../shared/assets/icons/RemovePopUp.icon";
 
-function PopUp({ googleLogin, handleClickChangePassword }) {
-    const { errorMessage, setErrorMessage, UpdatePassword } = UserController();
+function PopUp({ googleLogin=false, handleClickChangePassword }) {
+    const { response, errorMessage, setErrorMessage, SetPassword, UpdatePassword } = UserController();
     const [newPasswordStrengthColor, setNewPasswordStrengthColor] = useState("bg-[var(--red)]");
     const [confPasswordStrengthColor, setConfPasswordStrengthColor] = useState("bg-[var(--red)]");
     const [showSuccessfulWork, setSuccessfulWork] = useState(false);
+    const action = useRef({type: ""});
     const [ data, setData ] = useState({
         password: "", 
         newPassword: "",
@@ -59,18 +60,35 @@ function PopUp({ googleLogin, handleClickChangePassword }) {
         }
 
         try {
-            await UpdatePassword(data);
+            if(googleLogin) { 
+                await SetPassword(data);
+            }
+            else {
+                await UpdatePassword(data);
+            }
             
             setSuccessfulWork(true);
-            await new Promise((resolve) => setTimeout(resolve, 2000));
-            setSuccessfulWork(false)
-            handleClickChangePassword();
+            action.current = true;
         } 
         catch (err) {
             console.error("Error during submission:", err);
         }
         
     };
+
+    useEffect(() => {
+        if(!response) return;
+
+        if(action.current) {
+            setTimeout(() => {
+                setSuccessfulWork(false)
+                handleClickChangePassword();
+                // Reload the page
+                window.location.reload();
+            })
+        }
+
+    }, [response, handleClickChangePassword]);
 
     const renderSuccessfulPopUp = useMemo(() => {
         if (!showSuccessfulWork) return null;
@@ -148,7 +166,7 @@ function PopUp({ googleLogin, handleClickChangePassword }) {
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.85 }}
                                 type="submit"
-                                value="Change password"
+                                value={googleLogin ? "Set password" : "Change password"}
                                 onClick={handleSubmit}
                                 className="w-fit bg-[var(--black2white)] text-[18px] text-[var(--white2black)] font-[heebo-medium] rounded-[8px] px-[16px] py-[10px] cursor-pointer"
                             />
@@ -161,12 +179,8 @@ function PopUp({ googleLogin, handleClickChangePassword }) {
 }
 
 PopUp.propTypes = {
-    googleLogin: PropTypes.bool.isRequired,
+    googleLogin: PropTypes.bool,
     handleClickChangePassword: PropTypes.func.isRequired,
-};
-
-PopUp.defaultProps = {
-    googleLogin: false,
 };
 
 export { PopUp };

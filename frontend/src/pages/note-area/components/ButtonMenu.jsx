@@ -8,7 +8,7 @@ import { Notification } from "../../../shared/assets/icons/Notification.icon";
 import { Successful } from "../../../shared/assets/icons/Successful.icon";
 import { ErrorNotification } from "../../../shared/assets/icons/ErrorNotification.icon";
 
-function ButtonMenu({ type, nbrNotes, clickedButton, handleButtonClick, clickedColor, color }) {
+function ButtonMenu({ type="all_notes", nbrNotes=0, clickedButton="all_notes", handleButtonClick, clickedColor="bg-[var(--black2white)]", color="bg-[var(--skyWhite2skyBlack)]" }) {
     return (
         <motion.div
             whileHover={{ scale: 1.07 }}
@@ -130,15 +130,6 @@ ButtonMenu.propTypes = {
     handleButtonClick: PropTypes.func.isRequired,
     clickedColor: PropTypes.string,
     color: PropTypes.string,
-};
-
-// Set default props
-ButtonMenu.defaultProps = {
-    type: "all_notes",
-    nbrNotes: 0,
-    clickedButton: "all_notes",
-    clickedColor: "bg-[var(--black2white)]",
-    color: "bg-[var(--skyWhite2skyBlack)]",
 };
 
 export { ButtonMenu };

@@ -2,7 +2,20 @@ const NOTE = require('../models/noteModel');
 
 exports.getNotes = async (req, res) => {
     try {
-        const notes = await NOTE.find({ userId: req.userId }).sort({ day: 1, hour: 1, min: 1 });
+        const showBy = req.headers['showby'];
+        let notes;
+
+        if(!showBy) {}
+
+        if (showBy === "end_time") {
+            // Default sort by day, hour, and min
+            notes = await NOTE.find({ userId: req.userId }).sort({ day: 1, hour: 1, min: 1 });
+        } 
+        else {
+            // Sort by createTime if showBy is specified
+            notes = await NOTE.find({ userId: req.userId }).sort({ createTime: 1 });
+        }
+
         res.json({ notes });
     } 
     catch (err) {

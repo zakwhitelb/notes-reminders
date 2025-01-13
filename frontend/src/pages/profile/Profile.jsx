@@ -1,5 +1,5 @@
 // System
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { motion } from "framer-motion";
 import { useSelector } from 'react-redux';
 
@@ -14,7 +14,7 @@ import { Error404 } from "../error/Error404"; // Import Error404 component
 
 // Redux
 import { useDispatch } from "react-redux";
-import { Logout, DeleteAccount as deleteRedux } from "../../redux/slices/AuthentificationSlice";
+import { Logout, DeleteAccount as deleteRedux } from "../../shared/redux/slices/AuthentificationSlice";
 
 // Icons
 import { Logo } from "../../shared/assets/icons/Logo.icon";
@@ -31,14 +31,16 @@ function Profile() {
     const isLoggedIn = useSelector((state) => state.authentification_status.value);
     const [data, setData] = useState({ name: "", email: "", password: "" });
     const [showSuccessfulWork, setSuccessfulWork] = useState(false);
+    const action = useRef({type: ""});
     const dispatch = useDispatch();
-
+    
     // Fetch profile data on mount if not already present
     useEffect(() => {
-        const handleGetResponse = async () => {
+        const handleGetProfileContent = async () => {
             if (!response) {
                 try {
                     await Profile()
+                    action.current = {type: "handleGetProfileContent"}
                 }
                 catch (err) {
                     console.error("Error while fetching notes:", err);
@@ -46,7 +48,7 @@ function Profile() {
             }
         }
 
-        handleGetResponse();
+        handleGetProfileContent();
     }, [Profile, response]);
 
     // Update local state when response changes
@@ -65,39 +67,33 @@ function Profile() {
         [errorMessage, setErrorMessage]
     );
 
-    const handleSubmit = useCallback(async () => {
+    const handleUpdateAccount = useCallback(async () => {
         try {
             setResponse("");
             await UpdateAccount(data);
             setSuccessfulWork(true);
-            setTimeout(() => setSuccessfulWork(false), 2000);
+            action.current = {type: "handleUpdateAccount"}
         } 
         catch (err) {
             console.error("Error during submission:", err);
         }
     }, [data, UpdateAccount, setResponse]);
 
-    const handleDelete = useCallback(async () => {
-        try {
-            await DeleteAccount(data);
-            if (response === "User deleted successfully") {
-                setSuccessfulWork(true);
-                setTimeout(() => {
-                    dispatch(deleteRedux());
-                    localStorage.removeItem("token");
-                    window.location.href = "/";
-                }, 2000);
-            }
-        } catch (err) {
-            console.error("Error during deletion:", err);
-        }
-    }, [data, response, DeleteAccount, dispatch]);
-
     const handleLogout = useCallback(() => {
         localStorage.removeItem("token");
         dispatch(Logout());
         window.location.href = "/";
     }, [dispatch]);
+
+    const handleDelete = useCallback(async () => {
+        try {
+            await DeleteAccount(data);
+            action.current = {type: "handleDelete"}
+        } 
+        catch (err) {
+            console.error("Error during deletion:", err);
+        }
+    }, [data, DeleteAccount]);
 
     const renderSuccessfulPopUp = useMemo(() => {
         if (!showSuccessfulWork) return null;
@@ -113,6 +109,28 @@ function Profile() {
             </motion.div>
         );
     }, [showSuccessfulWork]);
+
+    // Update local state when response changes
+    useEffect(() => {
+        if(!response) return;
+
+        if (action.current.type === "handleGetProfileContent") {
+            const { name = "", email = "" } = response;
+            setData((prevData) => ({ ...prevData, name, email }));
+        }
+        if (action.current.type === "handleUpdateAccount") {
+            setTimeout(() => setSuccessfulWork(false), 2000);
+        }
+        if (action.current.type === "handleLogout") {
+            const { name = "", email = "" } = response;
+            setData((prevData) => ({ ...prevData, name, email }));
+        }
+        if (action.current.type === "handleDelete") {
+            dispatch(deleteRedux());
+            localStorage.removeItem("token");
+            window.location.href = "/";
+        }
+    }, [response, dispatch]);
 
     // Check if user is unauthenticated or there's an error fetching profile
     if (!isLoggedIn) {
@@ -207,7 +225,7 @@ function Profile() {
                             whileHover={{ scale: 1.07 }}
                             whileTap={{ scale: 0.75 }}
                             className="flex items-center justify-center h-[40px] bg-[var(--black2white)] rounded-[8px] px-[14px] py-[10px] cursor-pointer"
-                            onClick={handleSubmit}
+                            onClick={handleUpdateAccount}
                         >
                             <p className="w-fit text-[var(--white2black)] font-[heebo-medium]">
                                 Modifie

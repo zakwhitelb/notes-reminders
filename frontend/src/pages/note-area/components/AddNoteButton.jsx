@@ -28,13 +28,16 @@ function AddNoteButton({ setResponseNotes }) {
         status: "",
     });
 
-    const handleChange = useCallback((event) => {
-        setErrorMessage(""); // Clear previous error messages
-        const { name, value } = event.target;
-        setData((prev) => ({ ...prev, [name]: value }));
-    }, [setErrorMessage]);
+    const handleChange = useCallback(
+        (event) => {
+            setErrorMessage(""); // Clear previous error messages
+            const { name, value } = event.target;
+            setData((prev) => ({ ...prev, [name]: value }));
+        },
+        [setErrorMessage]
+    );
 
-    const handleToggelPopUp = useCallback(() => {
+    const handleTogglePopUp = useCallback(() => {
         setErrorMessage("");
         setData({
             title: "",
@@ -53,8 +56,7 @@ function AddNoteButton({ setResponseNotes }) {
 
         try {
             await AddOneNote(data); // Add the note
-        } 
-        catch (err) {
+        } catch (err) {
             console.error("Error during adding note (AddNoteButton.jsx):", err);
             setErrorMessage(err.response?.data?.message || "An unexpected error occurred.");
         }
@@ -62,21 +64,18 @@ function AddNoteButton({ setResponseNotes }) {
 
     useEffect(() => {
         if (response) {
-            setResponseNotes((prev) => ({
-                ...prev,
-                notes: [...prev.notes, response], // Add the new note to existing notes
-            }));
+            setResponseNotes("");
 
-            handleToggelPopUp(); // Close the popup
+            handleTogglePopUp(); // Close the popup
         }
-    }, [response, setResponseNotes, handleToggelPopUp]);
+    }, [response, setResponseNotes, handleTogglePopUp]);
 
     return (
         <>
             <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.85 }}
-                onClick={handleToggelPopUp} // Add click handler
+                onClick={handleTogglePopUp} // Add click handler
                 className="flex items-center justify-center bg-[var(--skyWhite2skyBlack)] w-[248px] h-[240px] rounded-[10px] cursor-pointer"
             >
                 <AddNoteIcon />
@@ -87,12 +86,12 @@ function AddNoteButton({ setResponseNotes }) {
                 ReactDOM.createPortal(
                     <PopUp
                         data={data}
-                        handleToggelPopUp={handleToggelPopUp}
+                        handleTogglePopUp={handleTogglePopUp}
                         handleChange={handleChange}
                         handleSubmit={handleAddNote}
                         errorMessage={errorMessage}
                     />,
-                    document.getElementById("note_area") // Specify the target element
+                    document.getElementById("note_area")
                 )}
         </>
     );

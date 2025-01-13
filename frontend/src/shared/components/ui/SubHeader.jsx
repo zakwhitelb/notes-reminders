@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import { RollBack } from "../active-icons/RollBack";
 import { Theme } from "../active-icons/Theme";
 
-function SubHeader({ location }) {
+function SubHeader({ location="/" }) {
     return (
         <>
             <div className="absolute z-11 top-[20px] left-[40px]">
@@ -19,11 +19,7 @@ function SubHeader({ location }) {
 }
 
 SubHeader.propTypes = {
-    location: PropTypes.string.isRequired,
+    location: PropTypes.string,
 };
-
-SubHeader.defaultProps = {
-    location: "/",
-}
 
 export { SubHeader };

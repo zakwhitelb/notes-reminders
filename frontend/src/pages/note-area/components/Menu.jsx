@@ -7,11 +7,12 @@ import { motion } from "framer-motion";
 // Components
 import { ButtonMenu } from "./ButtonMenu";
 import { SearchNote } from "./SearchNote";
+import { ShowFilter } from "./ui/ShowFilter";
 
 // Redux actions
-import { ChangeMenuClickedButton } from "../../../redux/slices/MenuClickedButtonSlice";
+import { ChangeMenuClickedButton } from "../../../shared/redux/slices/MenuClickedButtonSlice";
 
-function Menu({ noteNbr, incompleteNbr, completedNbr, overdueNbr }) {
+function Menu({ noteNbr=0, incompleteNbr=0, completedNbr=0, overdueNbr=0, setResponse=0 }) {
     const dispatch = useDispatch();
     const clickedButton = useSelector((state) => state.menu_clicked_button.value);
     const searchValue = useSelector((state) => state.search_note.value);
@@ -42,7 +43,6 @@ function Menu({ noteNbr, incompleteNbr, completedNbr, overdueNbr }) {
             transition={{ duration: 0.5, ease: "linear" }}
             className="grid grid-flow-row h-fit"
         >
-            {/* Header Section */}
             <motion.div
                 className="flex justify-between w-full duration-[0.5s] ease-in-out"
                 animate={{ gap: searchValue ? "20px" : "100px" }}
@@ -73,13 +73,16 @@ function Menu({ noteNbr, incompleteNbr, completedNbr, overdueNbr }) {
                 </motion.div>
             </motion.div>
 
-            {/* Divider */}
-            <div className="h-[2px] w-full bg-[var(--black2white)] mt-[8px] mb-[4px]"></div>
+            <div className="h-[2px] w-full bg-[var(--black2white)] rounded-full mt-[8px] mb-[4px]"></div>
 
-            {/* Notes Count */}
-            <p className="text-[18px] text-[var(--black2white)] font-[heebo-medium]">
-                {getNbrNotes} Notes
-            </p>
+            <div className="flex justify-between items-center">
+                <p className="text-[18px] text-[var(--black2white)] font-[heebo-medium]">
+                    {getNbrNotes} Notes
+                </p>
+
+                < ShowFilter setResponse={setResponse} />
+            </div>
+
         </motion.div>
     );
 }
@@ -90,14 +93,7 @@ Menu.propTypes = {
     incompleteNbr: PropTypes.number,
     completedNbr: PropTypes.number,
     overdueNbr: PropTypes.number,
-};
-
-// Default Props
-Menu.defaultProps = {
-    noteNbr: 0,
-    incompleteNbr: 0,
-    completedNbr: 0,
-    overdueNbr: 0,
+    setResponse: PropTypes.func.isRequired,
 };
 
 export { Menu };

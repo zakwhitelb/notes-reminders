@@ -1,7 +1,7 @@
 // System
 import PropTypes from "prop-types"
 
-function DeleteNote({ width, height, color }) {
+function DeleteNote({ width=16, height=18, color="var(--white)" }) {
     return (
         <div>
             <svg width={width} height={height} viewBox="0 0 16 18" xmlns="http://www.w3.org/2000/svg">
@@ -12,15 +12,9 @@ function DeleteNote({ width, height, color }) {
 }
 
 DeleteNote.propTypes = {
-    width: PropTypes.oneOfType(PropTypes.number, PropTypes.string),
-    height: PropTypes.oneOfType(PropTypes.number, PropTypes.string),
+    width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     color: PropTypes.string,
-}
-
-DeleteNote.defaultProps = {
-    width: "16px",
-    height: "18px",
-    color: "var(--white)",
 }
 
 export { DeleteNote };
