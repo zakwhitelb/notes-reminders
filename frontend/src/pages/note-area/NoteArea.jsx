@@ -60,7 +60,7 @@ function NoteArea() {
     return (
         <div
             id="note_area"
-            className="relative grid grid-rows-[auto_1fr] w-full h-full pt-[14px] px-[80px] gap-[14px] min-h-0"
+            className="relative grid grid-rows-[auto_1fr] w-full h-full pt-[14px] px-[30px] min-[560px]:px-[40px] md:px-[60px] lg:px-[80px] gap-[14px] min-h-0"
         >
             <Menu
                 noteNbr={noteCounts.all}

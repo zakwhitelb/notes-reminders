@@ -1,11 +1,12 @@
 // System
+import PropTypes from "prop-types";
 import { motion } from "motion/react"
 import { Link } from "react-router-dom";
 
 // Icons
 import { Profile as ProfileIcon } from "../../assets/icons/Profile.icon"
 
-function Profile() {
+function Profile({ width=30, height=30 }) {
     return (
         <motion.div 
             initial={{ scale: 0 }} 
@@ -18,10 +19,17 @@ function Profile() {
                 to="/profile"
                 className='w-fit'
             >
-                <ProfileIcon />
+                <ProfileIcon width={width} height={height} />
             </Link>
         </motion.div>
     )
 }
+
+// Define prop types
+Profile.propTypes = {
+    width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    color: PropTypes.string,
+};
 
 export { Profile };

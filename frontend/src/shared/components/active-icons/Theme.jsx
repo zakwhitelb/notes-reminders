@@ -1,4 +1,5 @@
 // System
+import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { motion } from "motion/react"
 
@@ -8,7 +9,7 @@ import { ToggleTheme } from '../../../shared/redux/slices/ThemeSlice';
 // Icons
 import { Theme as ThemeIcon } from "../../assets/icons/Theme.icon";
 
-function Theme() {
+function Theme({ width=30, height=30 }) {
     const dispatch = useDispatch();
 
     return (
@@ -20,9 +21,15 @@ function Theme() {
             className="cursor-pointer"
             onClick={() => dispatch(ToggleTheme())} // Dispatch action on click
         >
-            <ThemeIcon />
+            <ThemeIcon width={width} height={height} />
         </motion.div>
     );
 }
+
+// Define prop types
+Theme.propTypes = {
+    width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+};
 
 export { Theme };

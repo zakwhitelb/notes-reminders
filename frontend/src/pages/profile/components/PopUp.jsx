@@ -107,12 +107,12 @@ function PopUp({ googleLogin=false, handleClickChangePassword }) {
 
     return (
         <div
-            className="absolute z-10 top-1/2 transform -translate-y-1/2 flex items-center justify-center h-fit w-fit mx-[100px] bg-[var(--transparent)]"
+            className="absolute z-10 top-1/2 transform -translate-y-1/2 flex items-center justify-center h-fit w-full sm:px-[40px] md:px-[60px] lg:px-[100px] xl:px-[180px] bg-[var(--transparent)]"
         >
             <motion.div 
-                initial={{ scale: 0, opacity: 0 }} 
+                initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                className="relative grid w-[680px] h-fit bg-[var(--white2black)] rounded-[20px] px-[100px] py-[30px] gap-[40px] duration-[0.15s] ease-linear"
+                className="relative grid w-full h-fit bg-[var(--white2black)] rounded-[20px] px-[30px] sm:px-[40px] md:px-[60px] lg:px-[80px] xl:px-[100px] py-[30px] gap-[40px] duration-[0.15s] ease-linear"
             >
                 {renderSuccessfulPopUp}
                 <motion.div 
@@ -125,7 +125,7 @@ function PopUp({ googleLogin=false, handleClickChangePassword }) {
                 </motion.div>
 
                 <div className="flex flex-col">
-                    <h1 className="text-[34px] text-[var(--black2white)] text-center font-[merriweather-sans-bold] w-full">Profile</h1>
+                    <h1 className="text-[28px] sm:text-[34px] text-[var(--black2white)] text-center font-[merriweather-sans-bold] w-full">Profile</h1>
                 </div>
                 <div className="flex flex-col gap-[20px]">
                     {!googleLogin &&
@@ -157,7 +157,7 @@ function PopUp({ googleLogin=false, handleClickChangePassword }) {
                     />
                     <div className="grid gap-[10px]">
                         <div className="w-full mt-[-5px]">
-                            <p className="text-[16px] text-center font-[khula-regular] text-[var(--red)] cursor-default">
+                            <p className="text-[12px] sm:text-[16px] text-center font-[khula-regular] text-[var(--red)] cursor-default">
                                 {errorMessage}
                             </p>
                         </div>
@@ -168,7 +168,7 @@ function PopUp({ googleLogin=false, handleClickChangePassword }) {
                                 type="submit"
                                 value={googleLogin ? "Set password" : "Change password"}
                                 onClick={handleSubmit}
-                                className="w-fit bg-[var(--black2white)] text-[18px] text-[var(--white2black)] font-[heebo-medium] rounded-[8px] px-[16px] py-[10px] cursor-pointer"
+                                className="w-fit bg-[var(--black2white)] text-[16px] sm:text-[18px] text-[var(--white2black)] font-[heebo-medium] rounded-[8px] px-[16px] py-[10px] cursor-pointer"
                             />
                         </div>
                     </div>

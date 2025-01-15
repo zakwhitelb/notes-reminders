@@ -14,7 +14,7 @@ import { deleteUser } from "./app/deleteUser";
 
 function UserController() {
     const [response, setResponse] = useState(null);
-    const [errorMessage, setErrorMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState(null);
 
     async function ValidateUserToken() {
         try {

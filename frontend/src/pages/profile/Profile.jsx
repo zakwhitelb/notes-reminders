@@ -140,12 +140,12 @@ function Profile() {
     return (
         <div
             id="profile_container"
-            className="grid grid-flow-col auto-cols-[auto_1fr] w-full h-full pl-[20px] py-[20px]"
+            className=" relative flex flex-col sm:flex-row w-full h-full px-[30px] sm:pl-[20px] sm:pr-[0px] gap-y-[16px] sm:gap-y-0 py-[20px]"
         >
             <motion.div
                 initial={{ x: -1000 }}
                 animate={{ x: 0 }}
-                className="h-full w-fit max-w-[300px] z-10"
+                className="max-sm:max-h-[140px] sm:h-full w-full sm:max-w-[180px] md:max-w-[200px] lg:max-w-[240px]"
             >
                 <Picture />
             </motion.div>
@@ -155,15 +155,15 @@ function Profile() {
                 id="profile"
                 className="relative flex justify-center items-center w-full h-full"
             >
-                <div className="relative flex flex-col content-center justify-items-center justify-center w-full h-full px-[200px] gap-y-[20px]">
+                <div className="relative flex flex-col content-center justify-items-center justify-center w-full h-full sm:px-[80px] md:px-[120px] lg:px-[160px] xl:px-[200px] gap-y-[14px] sm:gap-y-[20px]">
                     {renderSuccessfulPopUp}
-                    <SubHeader location="/note-area" />
+                    <SubHeader />
                     <div className="grid justify-center w-full cursor-default">
                         <div className="flex justify-center w-full">
-                            <Logo width={50} height={50} />
+                            <Logo width={window.innerWidth < 440 ? 34 : window.innerWidth < 640 ? 44 : 50} height={window.innerWidth < 440 ? 34 : window.innerWidth < 640 ? 44 : 50} />
                         </div>
                         <div className="flex flex-col">
-                            <h1 className="text-[34px] text-center font-[merriweather-sans-bold] w-full">
+                            <h1 className="text-[24px] max-[440px]:text-[28px] sm:text-[34px] text-[var(--black2white)] text-center font-[merriweather-sans-bold] w-full">
                                 Profile
                             </h1>
                         </div>
@@ -191,19 +191,20 @@ function Profile() {
                         />
                         <ChangePasswordButton googleLogin={response ? response.googleLogin : false} />
                     </div>
-                    <div className="w-full mt-[-5px]">
-                        {errorMessage && (
-                            <div className="flex justify-center items-center w-full gap-x-[10px]">
-                                <WarningIcon />
-                                <p
-                                    id="error-message"
-                                    className="flex items-center justify-center h-fit text-[16px] text-center font-[khula-regular] text-[var(--red)] cursor-default"
-                                >
-                                    {errorMessage}
-                                </p>
-                            </div>
-                        )}
-                    </div>
+                    {errorMessage && (
+                        <div className="w-full mt-[-5px]">
+                                <div className="flex justify-center items-center w-full gap-x-[10px]">
+                                    <WarningIcon />
+                                    <p
+                                        id="error-message"
+                                        className="flex items-center justify-center h-fit text-[16px] text-center font-[khula-regular] text-[var(--red)] cursor-default"
+                                    >
+                                        {errorMessage}
+                                    </p>
+                                </div>
+                            
+                        </div>
+                    )}
                     <div className="flex justify-end items-center gap-x-[14px]">
                         <motion.div
                             whileHover={{ scale: 1.07 }}

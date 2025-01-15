@@ -10,13 +10,13 @@ function Home() {
   const isLoggedIn = useSelector((state) => state.authentification_status.value);
 
   return (
-    <div className="flex justify-center items-center h-full gap-x-[80px] px-[80px]">
+    <div className="flex flex-col-reverse md:flex-row justify-end md:justify-center md:items-center h-full gap-y-[16px] sm:gap-x-[40px] md:gap-x-[60px] lg:gap-x-[80px] px-[30px] min-[560px]:px-[40px] md:px-[60px] lg:px-[80px] py-[20px]">
       <motion.div 
         initial={{ x: -1000 }}
         animate={{ x: 0 }}
-        className="grid justify-center items-center w-fit min-w-[460px] h-fit text-center text-[18px] text-[var(--black2white)] gap-[20px] cursor-default"
+        className="grid justify-center items-center w-fit sm:min-w-[360px] md:min-w-[460px] h-fit text-center text-[16px] md:text-[18px] text-[var(--black2white)] gap-[20px] cursor-default"
       >
-        <h1 className="text-[var(--black2White)] font-[merriweather-sans-bold] text-[42px]">
+        <h1 className="text-[var(--black2White)] font-[merriweather-sans-bold] text-[34px] md:text-[42px]">
           Welcome to Note Reminder
         </h1>
         <p className="font-[khula-regular]">
@@ -60,7 +60,7 @@ function Home() {
       <motion.div
         initial={{ x: 1000 }}
         animate={{ x: 0 }}
-        className="h-full min-w-[500px] pb-[20px] pt-[10px]"
+        className="max-[767px]:max-h-[230px] md:h-full w-full md:min-w-[200px] xl:min-w-[500px] rounded[30px] overflow-hidden"
       >
         <Picture />
       </motion.div>

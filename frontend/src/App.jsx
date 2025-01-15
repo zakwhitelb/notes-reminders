@@ -13,15 +13,15 @@ import "./shared/styles/GlobaleStyle.css";
 // Controllers
 import { UserController } from "./shared/controllers/user/UserController";
 
+// Components
+import { Header } from "./shared/components/ui/Header";
+
 // Pages
 import { Home } from "./pages/home/Home";
 import { Authentication } from "./pages/authentication/Authentication";
 import { NoteArea } from "./pages/note-area/NoteArea";
 import { Profile } from "./pages/profile/Profile";
 import { Error404 } from "./pages/error/Error404";
-
-// Components
-import { Header } from "./shared/components/ui/Header";
 
 function App() {
   return (

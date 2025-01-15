@@ -19,7 +19,7 @@ function ChangePasswordButton({ googleLogin=false }) {
             <motion.p 
                 whileHover={{ scale: 1.07 }}
                 whileTap={{ scale: 0.75 }}
-                className="w-fit text-[16px] text-[var(--red)] font-[khula-regular] cursor-pointer"
+                className="w-fit text-[14px] sm:text-[16px] text-[var(--red)] font-[khula-regular] cursor-pointer"
                 onClick={() => {handleClickChangePassword()}}
             >
                 {googleLogin ? "Set password" : "Change password"}
