@@ -141,7 +141,7 @@ function Note({ note={ title: "", description: "", status: "incomplete", day: ""
     return (
         <>
             <div
-                className="relative flex flex-col justify-between w-[248px] h-[240px] p-[16px] gap-[14px] rounded-[10px] overflow-hidden cursor-default"
+                className="relative flex flex-col justify-between w-full h-[240px] p-[16px] gap-[14px] rounded-[10px] overflow-hidden cursor-default"
                 style={{ backgroundColor: statusColor.noteColor }}
             >
                 {isChangingStatus && (
@@ -213,7 +213,7 @@ function Note({ note={ title: "", description: "", status: "incomplete", day: ""
                         data={data}
                         type="edit"
                         handleChange={handleChange}
-                        handleToggelPopUp={handleTogglePopUp}
+                        handleTogglePopUp={handleTogglePopUp}
                         handleDeleteNote={handleDeleteNote}
                         handleSubmit={handleEditNote}
                         errorMessage={errorMessage}

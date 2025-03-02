@@ -14,7 +14,7 @@ function Home() {
       <motion.div 
         initial={{ x: -1000 }}
         animate={{ x: 0 }}
-        className="grid justify-center items-center w-fit sm:min-w-[360px] md:min-w-[460px] h-fit text-center text-[16px] md:text-[18px] text-[var(--black2white)] gap-[20px] cursor-default"
+        className="grid justify-center items-center w-fit sm:min-w-[360px] md:min-w-[460px] xl:max-w-[900px] h-fit text-center text-[16px] md:text-[18px] text-[var(--black2white)] gap-[20px] cursor-default"
       >
         <h1 className="text-[var(--black2White)] font-[merriweather-sans-bold] text-[34px] md:text-[42px]">
           Welcome to Note Reminder
@@ -60,7 +60,7 @@ function Home() {
       <motion.div
         initial={{ x: 1000 }}
         animate={{ x: 0 }}
-        className="max-[767px]:max-h-[230px] md:h-full w-full md:min-w-[200px] xl:min-w-[500px] rounded[30px] overflow-hidden"
+        className="max-[767px]:max-h-[230px] md:h-full md:min-w-[200px] xl:min-w-[500px] rounded[30px] overflow-hidden"
       >
         <Picture />
       </motion.div>

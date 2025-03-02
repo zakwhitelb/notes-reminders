@@ -13,6 +13,9 @@ import { Login } from '../../../shared/redux/slices/AuthentificationSlice';
 // Controllers
 import { UserController } from '../../../shared/controllers/user/UserController';
 
+// Icons
+import { Google as GoogleIcon } from '../../../shared/assets/icons/Google.icon';
+
 function GoogleAthentification({ clearData, setSuccessfulAuthentication }) {
     const { response, GoogleLoginAccount } = UserController();
     const [ data, setData ] = useState(null);
@@ -75,9 +78,10 @@ function GoogleAthentification({ clearData, setSuccessfulAuthentication }) {
             whileHover={{ scale: 1.06 }}
             whileTap={{ scale: 0.90 }}
             onClick={() => login()}
-            className="w-full bg-[var(--black2white)] rounded-[10px] py-[10px] text-center cursor-pointer"
+            className="flex justify-center items-center w-full bg-[var(--black2white)] rounded-[10px] py-[8px] sm:py-[10px] text-center cursor-pointer gap-[20px]"
         >
-            <p className="w-full text-[18px] text-[var(--white2black)] font-[heebo-regular] text-center">
+            <GoogleIcon width={window.innerWidth < 640 ? 24 : 30} height={window.innerWidth < 640 ? 24 : 30} />
+            <p className="w-fit text-[16px] sm:text-[18px] text-[var(--white2black)] font-[heebo-regular] text-center">
                 Log in with Google
             </p>
         </motion.div>

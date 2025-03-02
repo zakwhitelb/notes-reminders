@@ -9,12 +9,14 @@ import { Successful } from "../../../shared/assets/icons/Successful.icon";
 import { ErrorNotification } from "../../../shared/assets/icons/ErrorNotification.icon";
 
 function ButtonMenu({ type="all_notes", nbrNotes=0, clickedButton="all_notes", handleButtonClick, clickedColor="bg-[var(--black2white)]", color="bg-[var(--skyWhite2skyBlack)]" }) {
+    const SM_SIZE_CHECK = window.innerWidth > 639;
+    const MD_SIZE_CHECK = window.innerWidth > 1024;
     return (
         <motion.div
-            whileHover={{ scale: 1.07 }}
-            whileTap={{ scale: 0.75 }}
+            whileHover={{ scale: 1.06 }}
+            whileTap={{ scale: 0.85 }}
             onClick={() => handleButtonClick(type)}
-            className={`flex justify-between items-center w-fit h-[40px] rounded-[10px] px-[10px] gap-[24px] cursor-pointer whitespace-nowrap ${
+            className={`flex justify-between items-center w-fit h-[36px] sm:h-[40px] rounded-[10px] px-[10px] gap-x-[10px] sm:gap-x-[10px] md:gap-x-[20px] cursor-pointer whitespace-nowrap ${
                 clickedButton === type ? clickedColor : color
             }`}
         >
@@ -22,20 +24,22 @@ function ButtonMenu({ type="all_notes", nbrNotes=0, clickedButton="all_notes", h
                 <>
                     <div className="flex items-center justify-center w-full gap-[5px]">
                         <AllNotes
-                            width={20}
-                            height={20}
+                            width={SM_SIZE_CHECK ? 20 : 16}
+                            height={SM_SIZE_CHECK ? 20 : 16}
                             color={clickedButton === type ? "var(--white2black)" : "var(--black2white)"}
                         />
-                        <p
-                            className={`w-full text-[18px] font-[heebo-medium] ${
-                                clickedButton === type ? "text-[var(--white2black)]" : "text-[var(--black2white)]"
-                            }`}
-                        >
-                            All Notes
-                        </p>
+                        {MD_SIZE_CHECK&&(
+                            <p
+                                className={`w-full text-[14px] md:text-[16px] font-[heebo-medium] ${
+                                    clickedButton === type ? "text-[var(--white2black)]" : "text-[var(--black2white)]"
+                                }`}
+                            >
+                                All Notes
+                            </p>
+                        )}
                     </div>
                     <p
-                        className={`text-[18px] font-[heebo-medium] ${
+                        className={`text-[14px] md:text-[16px] font-[heebo-medium] ${
                             clickedButton === type ? "text-[var(--white2black)]" : "text-[var(--black2white)]"
                         }`}
                     >
@@ -47,20 +51,22 @@ function ButtonMenu({ type="all_notes", nbrNotes=0, clickedButton="all_notes", h
                 <>
                     <div className="flex items-center justify-center gap-[5px]">
                         <Notification
-                            width={20}
-                            height={20}
+                            width={SM_SIZE_CHECK ? 20 : 16}
+                            height={SM_SIZE_CHECK ? 20 : 16}
                             color={clickedButton === type ? "var(--white)" : "var(--black2white)"}
                         />
-                        <p
-                            className={`text-[18px] font-[heebo-medium] ${
-                                clickedButton === type ? "text-[var(--white)]" : "text-[var(--black2white)]"
-                            }`}
-                        >
-                            Incomplete
-                        </p>
+                        {MD_SIZE_CHECK && (
+                            <p
+                                className={`text-[14px] md:text-[16px] font-[heebo-medium] ${
+                                    clickedButton === type ? "text-[var(--white)]" : "text-[var(--black2white)]"
+                                }`}
+                            >
+                                Incomplete
+                            </p>
+                        )}
                     </div>
                     <p
-                        className={`text-[18px] font-[heebo-medium] ${
+                        className={`text-[14px] md:text-[16px] font-[heebo-medium] ${
                             clickedButton === type ? "text-[var(--white)]" : "text-[var(--black2white)]"
                         }`}
                     >
@@ -72,20 +78,22 @@ function ButtonMenu({ type="all_notes", nbrNotes=0, clickedButton="all_notes", h
                 <>
                     <div className="flex items-center justify-center gap-[5px]">
                         <Successful
-                            width={20}
-                            height={20}
+                            width={SM_SIZE_CHECK ? 20 : 16}
+                            height={SM_SIZE_CHECK ? 20 : 16}
                             color={clickedButton === type ? "var(--black)" : "var(--black2white)"}
                         />
-                        <p
-                            className={`text-[18px] font-[heebo-medium] ${
-                                clickedButton === type ? "text-[var(--black)]" : "text-[var(--black2white)]"
-                            }`}
-                        >
-                            Completed
-                        </p>
+                        {MD_SIZE_CHECK && (
+                            <p
+                                className={`text-[14px] md:text-[16px] font-[heebo-medium] ${
+                                    clickedButton === type ? "text-[var(--black)]" : "text-[var(--black2white)]"
+                                }`}
+                            >
+                                Completed
+                            </p>
+                        )}
                     </div>
                     <p
-                        className={`text-[18px] font-[heebo-medium] ${
+                        className={`text-[14px] md:text-[16px] font-[heebo-medium] ${
                             clickedButton === type ? "text-[var(--black)]" : "text-[var(--black2white)]"
                         }`}
                     >
@@ -97,20 +105,22 @@ function ButtonMenu({ type="all_notes", nbrNotes=0, clickedButton="all_notes", h
                 <>
                     <div className="flex items-center justify-center gap-[5px]">
                         <ErrorNotification
-                            width={20}
-                            height={20}
+                            width={SM_SIZE_CHECK ? 20 : 16}
+                            height={SM_SIZE_CHECK ? 20 : 16}
                             color={clickedButton === type ? "var(--white)" : "var(--black2white)"}
                         />
-                        <p
-                            className={`text-[18px] font-[heebo-medium] ${
-                                clickedButton === type ? "text-[var(--white)]" : "text-[var(--black2white)]"
-                            }`}
-                        >
-                            Overdue
-                        </p>
+                        {MD_SIZE_CHECK && (
+                            <p
+                                className={`text-[14px] md:text-[16px] font-[heebo-medium] ${
+                                    clickedButton === type ? "text-[var(--white)]" : "text-[var(--black2white)]"
+                                }`}
+                            >
+                                Overdue
+                            </p>
+                        )}
                     </div>
                     <p
-                        className={`text-[18px] font-[heebo-medium] ${
+                        className={`text-[14px] md:text-[16px] font-[heebo-medium] ${
                             clickedButton === type ? "text-[var(--white)]" : "text-[var(--black2white)]"
                         }`}
                     >

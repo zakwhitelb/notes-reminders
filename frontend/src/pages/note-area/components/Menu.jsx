@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 // Components
 import { ButtonMenu } from "./ButtonMenu";
 import { SearchNote } from "./SearchNote";
+import { SearchNoteMobile } from "./SearchNoteMobile";
 import { ShowFilter } from "./ui/ShowFilter";
 
 // Redux actions
@@ -41,15 +42,13 @@ function Menu({ noteNbr=0, incompleteNbr=0, completedNbr=0, overdueNbr=0, setRes
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.5, ease: "linear" }}
-            className="grid grid-flow-row h-fit"
+            className="grid grid-flow-row h-fit w-full"
         >
             <motion.div
-                className="flex justify-between w-full duration-[0.5s] ease-in-out"
-                animate={{ gap: searchValue ? "20px" : "100px" }}
+                className="flex justify-between w-full duration-[0.5s] ease-in-out gap-x-[10px] sm:gap-x-[16px]"
                 transition={{ duration: 0.5, ease: "linear" }}
             >
-                {/* Button Menu */}
-                <div className="flex justify-between gap-[20px]">
+                <div className="flex justify-between gap-x-[10px] sm:gap-x-[4]">
                     {buttonConfigs.map(({ type, nbr, clickedColor, color }) => (
                         <ButtonMenu
                             key={type}
@@ -63,20 +62,24 @@ function Menu({ noteNbr=0, incompleteNbr=0, completedNbr=0, overdueNbr=0, setRes
                     ))}
                 </div>
 
-                {/* Search Note */}
                 <motion.div
                     className="w-full"
-                    animate={{ width: searchValue ? "100%" : "fit-content" }}
+                    animate={{ width: searchValue ? "100%" : "max-content" }}
                     transition={{ duration: 0.5, ease: "linear" }}
                 >
-                    <SearchNote />
+                    {window.innerWidth > 540 ?
+                        <SearchNote />
+                    :
+                        <SearchNoteMobile />
+                    }
+                    
                 </motion.div>
             </motion.div>
 
             <div className="h-[2px] w-full bg-[var(--black2white)] rounded-full mt-[8px] mb-[4px]"></div>
 
             <div className="flex justify-between items-center">
-                <p className="text-[18px] text-[var(--black2white)] font-[heebo-medium]">
+                <p className="text-[16px] sm:text-[18px] text-[var(--black2white)] font-[heebo-medium]">
                     {getNbrNotes} Notes
                 </p>
 

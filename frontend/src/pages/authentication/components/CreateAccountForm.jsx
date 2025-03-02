@@ -67,8 +67,7 @@ function CreateAccountForm({ setButtonClicked, data, handleChange, clearData, se
 
     return (
         <>
-            
-            <div className="flex flex-col gap-[20px]">
+            <div className="flex flex-col gap-y-[14px] sm:gap-y-[20px]">
                 <Input
                     name="name"
                     placeholder="User name"
@@ -92,19 +91,19 @@ function CreateAccountForm({ setButtonClicked, data, handleChange, clearData, se
                     create_account
                 />
 
-                <div className="grid gap-[10px]">
-                    <div className="w-full mt-[-5px]">
-                        <p className="text-[16px] font-[khula-regular] text-[var(--red)] cursor-default">
-                            {errorMessage}
-                        </p>
-                    </div>
-                    <div className="flex justify-between items-center">
+                <div className="grid">
+                    {errorMessage && 
+                        <div className="w-full mt-[-5px]">
+                            <p className="text-[16px] font-[khula-regular] text-[var(--red)] cursor-default">{errorMessage}</p> 
+                        </div>
+                    }
+                    <div className="flex justify-between items-center gap-[4px] sm:gap-[10px]">
                         <div className="flex items-center gap-[4px]">
-                            <p className="text-[14px] font-[khula-regular] cursor-default">
+                            <p className="text-[12px] sm:text-[14px] font-[khula-regular] cursor-default">
                                 Already have an account?
                             </p>
                             <h3
-                                className="text-[15px] font-[khula-semi-bold] cursor-pointer"
+                                className="text-[13px] sm:text-[15px] font-[khula-semi-bold] cursor-pointer"
                                 onClick={() => {
                                     setButtonClicked("login");
                                     clearData();
@@ -118,9 +117,9 @@ function CreateAccountForm({ setButtonClicked, data, handleChange, clearData, se
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.85 }}
                             type="submit"
-                            value="Create account"
+                            value="Sing in"
                             onClick={handleSubmit}
-                            className="w-fit bg-[var(--black2white)] text-[18px] text-[var(--white2black)] font-[heebo-medium] rounded-[8px] px-[16px] py-[10px] cursor-pointer"
+                            className="w-fit bg-[var(--black2white)] text-[18px] text-[var(--white2black)] font-[heebo-medium] rounded-[8px] px-[14px] sm:px-[16px] py-[8px] sm:py-[10px] cursor-pointer"
                         />
                     </div>
                 </div>

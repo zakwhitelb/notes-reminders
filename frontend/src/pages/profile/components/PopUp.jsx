@@ -107,7 +107,7 @@ function PopUp({ googleLogin=false, handleClickChangePassword }) {
 
     return (
         <div
-            className="absolute z-10 top-1/2 transform -translate-y-1/2 flex items-center justify-center h-fit w-full sm:px-[40px] md:px-[60px] lg:px-[100px] xl:px-[180px] bg-[var(--transparent)]"
+            className="absolute z-10 top-1/2 transform -translate-y-1/2 flex items-center justify-center h-fit w-[calc(100%-60px)] sm:w-full sm:px-[40px] md:px-[60px] lg:px-[100px] xl:px-[180px] bg-[var(--transparent)]"
         >
             <motion.div 
                 initial={{ scale: 0, opacity: 0 }}

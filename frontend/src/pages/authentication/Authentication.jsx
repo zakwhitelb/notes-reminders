@@ -40,8 +40,8 @@ function Authentication() {
 
     return (
         <div 
-            className={`grid items-center w-screen h-full py-[20px] ${
-                buttonClicked === "create_account" ? "grid-cols-[1fr_auto] pr-[20px]" : "grid-cols-[auto_1fr] pl-[20px]"
+            className={`grid items-center w-screen h-full py-[20px] max-sm:px-[30px] max-sm:grid-rows-[auto_1fr] ${
+                buttonClicked === "create_account" ? "sm:grid-cols-[1fr_auto] sm:pr-[20px]" : "sm:grid-cols-[auto_1fr] sm:pl-[20px]"
             }`}
         >
             <motion.div
@@ -49,12 +49,11 @@ function Authentication() {
                 initial={{ x: -1000 }}
                 animate={{ x: 0 }}
                 transition={{ duration: 0.5, type: "spring", stiffness: 80 }}
-                className={`h-full w-fit max-w-[500px] z-10 ${
-                    buttonClicked === "create_account" ? "order-2" : "order-1"
+                className={`relative h-[140px] sm:h-full w-full sm:max-w-[220px] md:max-w-[280px] lg:max-w-[320px] z-10 ${
+                    buttonClicked === "create_account" ? "sm:order-2" : "sm:order-1"
                 }`}
                 style={{
                     zIndex: 10,
-                    position: "relative",
                 }}
             >
                 <Picture />
@@ -65,13 +64,13 @@ function Authentication() {
                 initial={{ x: 1000 }}
                 animate={{ x: 0 }}
                 transition={{ duration: 0.5, type: "spring", stiffness: 80 }}
-                className={`relative flex flex-col items-center justify-center h-full flex-[2] min-w-[480px] text-center text-[var(--black2white)] px-[100px] ${
+                className={`relative flex flex-col items-center justify-center h-full flex-[2] sm:min-w-[480px] text-center text-[var(--black2white)] sm:px-[40px] md:px-[60px] lg:px-[80px] xl:px-[100px] ${
                     buttonClicked === "create_account" ? "order-1" : "order-2"
                 }`}
             >
                 <SubHeader location={"/"} />
                 
-                <div className="flex flex-col items-center justify-center w-full h-full gap-y-[30px]">
+                <div className="flex flex-col items-center justify-center w-full h-full gap-[10px] sm:gap-y-[20px] md:gap-y-[30px]">
                     {showSuccessfulAuthentication &&
                         <motion.div 
                             layout
@@ -84,24 +83,31 @@ function Authentication() {
                     }
                     <div className="grid justify-center w-full cursor-default">
                         <div className="flex justify-center w-full">
-                            <Logo width={50} height={50} />
+                            <Logo width={window.innerWidth < 640 ? 30 : 38} height={window.innerWidth < 640 ? 30 : 38} />
                         </div>
                         <div className="flex flex-col">
-                            <h1 className="text-[34px] font-[merriweather-sans-bold] w-full"> 
-                                Get started
+                            <h1 className="text-[24px] sm:text-[34px] font-[merriweather-sans-bold] w-full"> 
+                                
+                                {buttonClicked === "create_account" ? 
+                                    "Get started" 
+                                : 
+                                    "Welcome back"
+                                }
                             </h1>
-                            <p className="text-[12px] font-[khula-regular] w-full">
-                                Welcome to Note Reminder - let’s create your account
+                            <p className="text-[10px] sm:text-[12px] font-[khula-regular] w-full">
+                                {buttonClicked === "create_account" ? 
+                                    "Welcome to Note Reminder - let’s create your account" 
+                                : 
+                                    "Please enter your details"
+                                }
                             </p>
                         </div>
                     </div>
-                    <div className="grid gap-[20px] w-full">
+                    <div className="grid gap-[5px] sm:gap-[20px] w-full">
                         <GoogleAthentification clearData={clearData} setSuccessfulAuthentication={setSuccessfulAuthentication} />
-                        
-                        <p className="w-full text-center cursor-default">
+                        <p className="w-full h-fit text-[10px] sm:text-[12px] text-center cursor-default">
                             or
                         </p>
-
                         <div className="relative z-8">
                             {buttonClicked === "create_account" ? (
                                 <CreateAccountForm setButtonClicked={setButtonClicked} data={data} handleChange={handleChange} clearData={clearData} setSuccessfulAuthentication={setSuccessfulAuthentication} />

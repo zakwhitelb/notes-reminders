@@ -76,7 +76,7 @@ function AddNoteButton({ setResponseNotes }) {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.85 }}
                 onClick={handleTogglePopUp} // Add click handler
-                className="flex items-center justify-center bg-[var(--skyWhite2skyBlack)] w-[248px] h-[240px] rounded-[10px] cursor-pointer"
+                className="flex items-center justify-center bg-[var(--skyWhite2skyBlack)] w-full sm:min-w-[248px] h-[240px] rounded-[10px] cursor-pointer"
             >
                 <AddNoteIcon />
             </motion.div>

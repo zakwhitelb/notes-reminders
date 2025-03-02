@@ -140,7 +140,7 @@ function Profile() {
     return (
         <div
             id="profile_container"
-            className=" relative flex flex-col sm:flex-row w-full h-full px-[30px] sm:pl-[20px] sm:pr-[0px] gap-y-[16px] sm:gap-y-0 py-[20px]"
+            className="relative flex flex-col sm:flex-row justify-center items-center w-full h-full px-[30px] sm:pl-[20px] sm:pr-[0px] gap-y-[16px] sm:gap-y-0 py-[20px]"
         >
             <motion.div
                 initial={{ x: -1000 }}
@@ -160,10 +160,10 @@ function Profile() {
                     <SubHeader />
                     <div className="grid justify-center w-full cursor-default">
                         <div className="flex justify-center w-full">
-                            <Logo width={window.innerWidth < 440 ? 34 : window.innerWidth < 640 ? 44 : 50} height={window.innerWidth < 440 ? 34 : window.innerWidth < 640 ? 44 : 50} />
+                            <Logo width={window.innerWidth < 440 ? 28 : window.innerWidth < 640 ? 44 : 50} height={window.innerWidth < 440 ? 28 : window.innerWidth < 640 ? 44 : 50} />
                         </div>
                         <div className="flex flex-col">
-                            <h1 className="text-[24px] max-[440px]:text-[28px] sm:text-[34px] text-[var(--black2white)] text-center font-[merriweather-sans-bold] w-full">
+                            <h1 className="text-[24px] min-[440px]:text-[28px] sm:text-[34px] text-[var(--black2white)] text-center font-[merriweather-sans-bold] w-full">
                                 Profile
                             </h1>
                         </div>

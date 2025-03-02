@@ -53,7 +53,7 @@ function LoginForm({ setButtonClicked, data, handleChange, clearData, setSuccess
     };
 
     return (
-        <div className="flex flex-col gap-[20px]">
+        <div className="flex flex-col gap-y-[14px] sm:gap-y-[20px]">
             <Input 
                 type="email" 
                 name="email" 
@@ -68,28 +68,22 @@ function LoginForm({ setButtonClicked, data, handleChange, clearData, setSuccess
                 value={data.password || ""} 
                 handleChange={handleInputChange} 
             />
-            <div className="flex justify-end items-center">
-                <p 
-                    className="w-fit text-[14px] text-end text-[var(--red)] font-[khula-regular] cursor-pointer"
-                    onClick={() => {}}
-                >
-                    Forgot password?
-                </p>
-            </div>
-            <div className="grid gap-[10px]">
-                <div className="w-full mt-[-5px]">
-                    <p className="text-[16px] font-[khula-regular] text-[var(--red)] cursor-default">{errorMessage}</p> 
-                </div>
+            <div className="grid">
+                {errorMessage && 
+                    <div className="w-full mt-[-5px]">
+                        <p className="text-[16px] font-[khula-regular] text-[var(--red)] cursor-default">{errorMessage}</p> 
+                    </div>
+                }
                 <div className="flex justify-between items-center">
                     <div className="flex items-center gap-[4px]">
-                        <p className="text-[14px] font-[khula-regular] cursor-default">
+                        <p className="text-[12px] sm:text-[14px] font-[khula-regular] cursor-default">
                             Already have an account?
                         </p>
                         <h3 
-                            className="text-[15px] font-[khula-semi-bold] cursor-pointer"
+                            className="text-[13px] sm:text-[15px] font-[khula-semi-bold] cursor-pointer"
                             onClick={() => { setButtonClicked("create_account"); clearData(); }}
                         >
-                            Create account
+                            Sing in
                         </h3>
                     </div>
                     
@@ -99,7 +93,7 @@ function LoginForm({ setButtonClicked, data, handleChange, clearData, setSuccess
                         type="submit" 
                         value="Log in" 
                         onClick={handleSubmit}
-                        className="w-fit bg-[var(--black2white)] text-[18px] text-[var(--white2black)] font-[heebo-medium] rounded-[8px] px-[16px] py-[10px] cursor-pointer"
+                        className="w-fit bg-[var(--black2white)] text-[18px] text-[var(--white2black)] font-[heebo-medium] rounded-[8px] px-[14px] sm:px-[16px] py-[8px] sm:py-[10px] cursor-pointer"
                     />
                 </div>
             </div>

@@ -30,7 +30,7 @@ function PopUpContent({ data={}, type="add_note", handleDeleteNote, handleSubmit
     };
 
     return (
-        <div className="grid auto-rows-[auto_auto_1fr_auto] h-full gap-[30px] text-[18px] text-[var(--black2white)] font-[merriweather-sans-regular]">
+        <div className="grid auto-rows-[auto_auto_1fr_auto] h-full gap-y-[14px] sm:gap-y-[20px] md:gap-y-[30px] text-[16px] sm:text-[18px] text-[var(--black2white)] font-[merriweather-sans-regular]">
             {/* Title Input */}
             <div>
                 <input
@@ -38,47 +38,49 @@ function PopUpContent({ data={}, type="add_note", handleDeleteNote, handleSubmit
                     placeholder="Title"
                     value={title || ""}
                     onChange={handleChange}
-                    className="h-[56px] w-full bg-transparent outline-none text-[54px] text-[var(--black2white)] px-[10px] placeholder:text-[var(--placeholder)]"
+                    className="h-[32px] sm:h-[46px] md:h-[56px] w-full bg-transparent outline-none text-[34px] sm:text-[48px] md:text-[54px] text-[var(--black2white)] px-[10px] placeholder:text-[var(--placeholder)]"
                 />
             </div>
 
             {/* Deadline Inputs */}
-            <div className="flex justify-start w-fit gap-x-[20px]">
-                <div className="flex items-center gap-x-[14px]">
+            <div className="flex flex-col md:flex-row justify-start w-full md:w-fit gap-[10px] sm:gap-x-[20px]">
+                <div className="flex flex-col md:flex-row md:items-center w-full md:w-fit gap-y-[5px] gap-x-[14px]">
                     <label htmlFor="date_note">Deadlines:</label>
                     <input
                         type="date"
                         name="day"
                         value={day ? formatDateToISO(day) : ""} // Convert DD-MM-YYYY to YYYY-MM-DD
                         onChange={handleDateChange} // Handle date change with conversion
-                        className="h-[40px] w-[200px] bg-[var(--skyWhite2skyBlack)] text-center rounded-[8px] px-[14px] outline-none placeholder:text-[var(--placeholder)] cursor-pointer"
+                        className="h-9 sm:h-[40px] w-full md:w-[200px] bg-[var(--skyWhite2skyBlack)] text-center rounded-[6px] sm:rounded-[8px] px-[10px] sm:px-[14px] outline-none placeholder:text-[var(--placeholder)] cursor-pointer"
                     />
                 </div>
-                <div className="flex items-center w-fit gap-x-[14px]">
-                    <label htmlFor="hour_note">Hour:</label>
-                    <input
-                        type="number"
-                        name="hour"
-                        min={0}
-                        max={23}
-                        placeholder="00"
-                        value={hour !== "0" || hour !== 0 || hour !== "" ? hour : "00"}
-                        onChange={handleChange}
-                        className="h-[40px] w-[80px] bg-[var(--skyWhite2skyBlack)] text-center rounded-[8px] px-[14px] outline-none placeholder:text-[var(--placeholder)] cursor-pointer"
-                    />
-                </div>
-                <div className="flex items-center w-fit gap-x-[14px]">
-                    <label htmlFor="min_note">Min:</label>
-                    <input
-                        type="number"
-                        name="min"
-                        min={0}
-                        max={59}
-                        placeholder="00"
-                        value={min || "0"}
-                        onChange={handleChange}
-                        className="h-[40px] w-[80px] bg-[var(--skyWhite2skyBlack)] text-center rounded-[8px] px-[14px] outline-none placeholder:text-[var(--placeholder)] cursor-pointer"
-                    />
+                <div className="flex w-full gap-x-[10px]">
+                    <div className="flex flex-col md:flex-row md:items-center w-full md:w-fit gap-y-[5px] gap-x-[14px]">
+                        <label htmlFor="hour_note">Hour:</label>
+                        <input
+                            type="number"
+                            name="hour"
+                            min={0}
+                            max={23}
+                            placeholder="00"
+                            value={hour !== "0" || hour !== 0 || hour !== "" ? hour : "00"}
+                            onChange={handleChange}
+                            className="h-9 sm:h-[40px] w-full md:w-[80px] bg-[var(--skyWhite2skyBlack)] text-center rounded-[8px] px-[14px] outline-none placeholder:text-[var(--placeholder)] cursor-pointer"
+                        />
+                    </div>
+                    <div className="flex flex-col md:flex-row md:items-center w-full md:w-fit gap-y-[5px] gap-x-[14px]">
+                        <label htmlFor="min_note">Min:</label>
+                        <input
+                            type="number"
+                            name="min"
+                            min={0}
+                            max={59}
+                            placeholder="00"
+                            value={min || "0"}
+                            onChange={handleChange}
+                            className="h-9 sm:h-[40px] w-full md:w-[80px] bg-[var(--skyWhite2skyBlack)] text-center rounded-[8px] px-[14px] outline-none placeholder:text-[var(--placeholder)] cursor-pointer"
+                        />
+                    </div>
                 </div>
             </div>
 

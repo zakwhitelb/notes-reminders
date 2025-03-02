@@ -27,7 +27,7 @@ function ChangePasswordButton({ googleLogin=false }) {
             {isPopupVisible && 
                 ReactDOM.createPortal(
                     <PopUp googleLogin={googleLogin} handleClickChangePassword={handleClickChangePassword} />,  // PopUp to render
-                    document.getElementById("profile")  // Specify the target element
+                    document.getElementById(window.innerWidth >= 640 ? "profile" : "profile_container")  // Specify the target element
                 )
             }
             {isPopupVisible && 

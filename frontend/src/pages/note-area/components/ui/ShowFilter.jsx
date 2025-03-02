@@ -34,7 +34,7 @@ function ShowFilter({ setResponse }) {
             >
                 <div className="flex justify-center items-center gap-x-[5px]">
                     <EndTimeIcon />
-                    <p className="text-[18px] text-[var(--black2white)] font-[heebo-regular]">
+                    <p className="text-[14px] sm:text-[16px] text-[var(--black2white)] font-[heebo-regular]">
                         End time
                     </p>
                 </div>
